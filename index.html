@@ -23,11 +23,10 @@ img{max-width:100%;display:block}
 /* Header: nur Logo, ohne Rahmen/Badge */
 .header{
   .header{
-  position:fixed; inset:0 0 auto 0; height:86px;
-  display:flex; align-items:center; justify-content:center;
-  padding-top:2cm;      
-  z-index:80;
+    position:fixed; inset:0 0 auto 0; height:86px;
+  display:flex; align-items:center; justify-content:center; z-index:80;
   pointer-events:none;
+  padding-top:2cm;
 }
 
 }
@@ -41,7 +40,7 @@ img{max-width:100%;display:block}
 
 /* Hamburger/X – immer sichtbar, über Overlay */
 .hamburger{
-  position:fixed; top: max(12px, env(safe-area-inset-top)); right:42px;
+  position:fixed; top: max(12px, env(safe-area-inset-top)); right:14px;
   width:42px; height:42px; display:grid; place-items:center;
   border:0; background:transparent; cursor:pointer; z-index:100;
 }
