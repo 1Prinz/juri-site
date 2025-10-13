@@ -6,7 +6,6 @@
   <title>Juri Prinz Photography</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* ====== BASIC RESET ====== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -16,20 +15,21 @@
       height: 100vh;
     }
 
-    /* ====== LOGO ====== */
+    /* ===== LOGO ===== */
     header {
       position: fixed;
-      top: 40px;
+      top: 30px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 20;
+      z-index: 30;
       text-align: center;
     }
     header img {
-      width: 160px;
+      width: 176px; /* ca. +10% größer */
+      max-width: 42vw;
     }
 
-    /* ====== HAMBURGER ====== */
+    /* ===== HAMBURGER ===== */
     .hamburger {
       position: fixed;
       top: 40px;
@@ -37,7 +37,7 @@
       width: 30px;
       height: 22px;
       cursor: pointer;
-      z-index: 25;
+      z-index: 40;
       transition: all 0.3s ease;
     }
     .hamburger span {
@@ -59,31 +59,57 @@
       transform: translateY(-8px) rotate(-45deg);
     }
 
-    /* ====== OVERLAY / LIQUID GLASS ====== */
+    /* ===== MENU OVERLAY ===== */
     .menu-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      backdrop-filter: blur(16px) saturate(180%);
-      background-color: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      inset: 0;
+      backdrop-filter: blur(20px) saturate(160%);
+      background-color: rgba(20, 20, 20, 0.6);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s ease;
-      z-index: 15;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .menu-overlay.active {
       opacity: 1;
       pointer-events: all;
     }
 
-    /* ====== DESKTOP SECTIONS ====== */
+    .menu-overlay ul {
+      list-style: none;
+      text-align: center;
+    }
+    .menu-overlay li {
+      font-size: 2rem;
+      font-weight: 500;
+      margin: 18px 0;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.4s ease;
+    }
+    .menu-overlay.active li {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .menu-overlay li:hover {
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+
+    /* ===== SECTIONS (DESKTOP) ===== */
     .sections {
       display: flex;
       height: 100vh;
       overflow: hidden;
+      align-items: center;
+      padding-top: 15vh; /* oben Platz für Logo */
+      padding-bottom: 8vh; /* unten etwas Abstand */
     }
     .section {
       flex: 1;
@@ -92,6 +118,8 @@
       transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+      margin: 0 4px;
+      border-radius: 14px;
     }
     .section img {
       width: 100%;
@@ -110,7 +138,7 @@
       text-shadow: 0 0 10px rgba(0,0,0,0.6);
     }
 
-    /* Hover Effekt GTA-Style */
+    /* Hover GTA-Style */
     .sections:hover .section {
       filter: grayscale(100%) brightness(0.75);
     }
@@ -121,34 +149,35 @@
       z-index: 10;
     }
 
-    /* ====== MOBILE CAROUSEL ====== */
+    /* ===== MOBILE CAROUSEL ===== */
     @media (max-width: 900px) {
       .sections {
-        display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
+        padding-top: 22vh; /* mehr Platz oben */
+        padding-bottom: 10vh;
       }
       .section {
-        flex: 0 0 80%;
-        min-width: 80%;
-        margin: 0 10%;
-        border-radius: 18px;
+        flex: 0 0 75%;
+        min-width: 75%;
+        margin: 0 12.5%;
+        border-radius: 20px;
         clip-path: none;
         scroll-snap-align: center;
-        transform: scale(0.95);
+        transform: scale(0.92);
         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
       .section.active {
         transform: scale(1);
       }
       .section img {
-        border-radius: 18px;
+        border-radius: 20px;
       }
     }
 
-    /* ====== DOT NAV ====== */
+    /* ===== DOT NAV ===== */
     .dots {
       position: fixed;
       bottom: 40px;
@@ -169,7 +198,6 @@
       background: #fff;
       transform: scale(1.3);
     }
-
   </style>
 </head>
 <body>
@@ -180,13 +208,23 @@
   <div class="hamburger" id="hamburger">
     <span></span><span></span><span></span>
   </div>
-  <div class="menu-overlay" id="menu"></div>
+
+  <div class="menu-overlay" id="menu">
+    <ul>
+      <li>Portrait</li>
+      <li>Event</li>
+      <li>Landscape</li>
+      <li>Corporate</li>
+      <li>About</li>
+      <li>Behind the Scenes</li>
+    </ul>
+  </div>
 
   <div class="sections" id="sections">
-    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
+    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg alt=""><h2>Portrait</h2></div>
     <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
     <div class="section"><img src="img/IMG_3274_final.jpg" alt=""><h2>Landscape</h2></div>
-    <div class="section"><img src="img/IMG_4213.JPG" alt=""><h2>Corporate</h2></div>
+    <div class="section"><img src="img/MG_4213.JPG" alt=""><h2>Corporate</h2></div>
     <div class="section"><img src="img/about1.jpg" alt=""><h2>About</h2></div>
     <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
   </div>
@@ -201,7 +239,7 @@
   </div>
 
   <script>
-    // Hamburger
+    // Hamburger Menü Toggle
     const burger = document.getElementById('hamburger');
     const menu = document.getElementById('menu');
     burger.addEventListener('click', () => {
@@ -209,14 +247,13 @@
       menu.classList.toggle('active');
     });
 
-    // Mobile snapping physics
+    // Mobile Scroll Snapping Dots
     const sections = document.getElementById('sections');
     const dots = document.querySelectorAll('.dot');
     let activeIndex = 0;
-
     sections.addEventListener('scroll', () => {
       const scrollLeft = sections.scrollLeft;
-      const width = sections.clientWidth * 0.8;
+      const width = sections.clientWidth * 0.75;
       const newIndex = Math.round(scrollLeft / width);
       if (newIndex !== activeIndex) {
         activeIndex = newIndex;
