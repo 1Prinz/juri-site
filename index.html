@@ -18,15 +18,15 @@
     /* ===== LOGO ===== */
     header {
       position: fixed;
-      top: 30px;
+      top: 18px; /* ca. 2 cm höher */
       left: 50%;
       transform: translateX(-50%);
       z-index: 30;
       text-align: center;
     }
     header img {
-      width: 176px;
-      max-width: 42vw;
+      width: 185px; /* +5 % größer */
+      max-width: 45vw;
     }
 
     /* ===== HAMBURGER ===== */
@@ -98,7 +98,7 @@
     }
     .menu-overlay li:hover {
       color: #fff;
-      text-shadow: 0 0 20px rgba(255,255,255,0.3);
+      text-shadow: 0 0 25px rgba(255,255,255,0.45); /* +25 % stärkerer Glow */
       cursor: pointer;
     }
 
@@ -108,7 +108,7 @@
       height: 100vh;
       overflow: hidden;
       align-items: center;
-      padding-top: 10vh; /* weniger Platz oben als vorher, aber Logo bleibt frei */
+      padding-top: 14vh; /* +2 cm Tiefer: optisch verschoben */
       padding-bottom: 6vh;
     }
     .section {
@@ -120,7 +120,7 @@
       clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
       margin: 0 4px;
       border-radius: 14px;
-      height: 84vh; /* größer gemacht */
+      height: 80vh; /* 5 % kleiner */
     }
     .section img {
       width: 100%;
@@ -167,7 +167,7 @@
         border-radius: 20px;
         clip-path: none;
         scroll-snap-align: center;
-        height: 70vh; /* größer, füllt mehr */
+        height: 68vh; /* leicht kleiner */
         transform: scale(0.94);
         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
@@ -188,7 +188,7 @@
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      display: none; /* jetzt standardmäßig aus – nur Mobile zeigt es */
+      display: none; /* Desktop aus */
       gap: 8px;
       z-index: 30;
     }
