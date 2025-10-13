@@ -25,7 +25,7 @@
       text-align: center;
     }
     header img {
-      width: 176px; /* ca. +10% größer */
+      width: 176px;
       max-width: 42vw;
     }
 
@@ -108,8 +108,8 @@
       height: 100vh;
       overflow: hidden;
       align-items: center;
-      padding-top: 15vh; /* oben Platz für Logo */
-      padding-bottom: 8vh; /* unten etwas Abstand */
+      padding-top: 10vh; /* weniger Platz oben als vorher, aber Logo bleibt frei */
+      padding-bottom: 6vh;
     }
     .section {
       flex: 1;
@@ -120,6 +120,7 @@
       clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
       margin: 0 4px;
       border-radius: 14px;
+      height: 84vh; /* größer gemacht */
     }
     .section img {
       width: 100%;
@@ -156,17 +157,18 @@
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
-        padding-top: 22vh; /* mehr Platz oben */
+        padding-top: 20vh;
         padding-bottom: 10vh;
       }
       .section {
-        flex: 0 0 75%;
-        min-width: 75%;
-        margin: 0 12.5%;
+        flex: 0 0 78%;
+        min-width: 78%;
+        margin: 0 11%;
         border-radius: 20px;
         clip-path: none;
         scroll-snap-align: center;
-        transform: scale(0.92);
+        height: 70vh; /* größer, füllt mehr */
+        transform: scale(0.94);
         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
       .section.active {
@@ -174,6 +176,9 @@
       }
       .section img {
         border-radius: 20px;
+      }
+      .dots {
+        display: flex;
       }
     }
 
@@ -183,7 +188,7 @@
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
+      display: none; /* jetzt standardmäßig aus – nur Mobile zeigt es */
       gap: 8px;
       z-index: 30;
     }
@@ -221,10 +226,10 @@
   </div>
 
   <div class="sections" id="sections">
-    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg alt=""><h2>Portrait</h2></div>
+    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
     <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
     <div class="section"><img src="img/IMG_3274_final.jpg" alt=""><h2>Landscape</h2></div>
-    <div class="section"><img src="img/MG_4213.JPG" alt=""><h2>Corporate</h2></div>
+    <div class="section"><img src="img/IMG_4213.JPG" alt=""><h2>Corporate</h2></div>
     <div class="section"><img src="img/about1.jpg" alt=""><h2>About</h2></div>
     <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
   </div>
@@ -253,7 +258,7 @@
     let activeIndex = 0;
     sections.addEventListener('scroll', () => {
       const scrollLeft = sections.scrollLeft;
-      const width = sections.clientWidth * 0.75;
+      const width = sections.clientWidth * 0.78;
       const newIndex = Math.round(scrollLeft / width);
       if (newIndex !== activeIndex) {
         activeIndex = newIndex;
