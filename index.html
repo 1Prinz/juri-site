@@ -18,14 +18,14 @@
     /* ===== LOGO ===== */
     header {
       position: fixed;
-      top: 18px; /* ca. 2 cm höher */
+      top: -30px; /* vorher 18px → jetzt ca. 3 cm höher */
       left: 50%;
       transform: translateX(-50%);
       z-index: 30;
       text-align: center;
     }
     header img {
-      width: 185px; /* +5 % größer */
+      width: 185px;
       max-width: 45vw;
     }
 
@@ -98,7 +98,7 @@
     }
     .menu-overlay li:hover {
       color: #fff;
-      text-shadow: 0 0 25px rgba(255,255,255,0.45); /* +25 % stärkerer Glow */
+      text-shadow: 0 0 25px rgba(255,255,255,0.45);
       cursor: pointer;
     }
 
@@ -108,7 +108,7 @@
       height: 100vh;
       overflow: hidden;
       align-items: center;
-      padding-top: 14vh; /* +2 cm Tiefer: optisch verschoben */
+      padding-top: 18vh; /* vorher 14vh → jetzt ca. 2 cm tiefer */
       padding-bottom: 6vh;
     }
     .section {
@@ -120,7 +120,7 @@
       clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
       margin: 0 4px;
       border-radius: 14px;
-      height: 80vh; /* 5 % kleiner */
+      height: 80vh;
     }
     .section img {
       width: 100%;
@@ -157,7 +157,7 @@
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
-        padding-top: 20vh;
+        padding-top: 23vh; /* angepasst */
         padding-bottom: 10vh;
       }
       .section {
@@ -167,7 +167,7 @@
         border-radius: 20px;
         clip-path: none;
         scroll-snap-align: center;
-        height: 68vh; /* leicht kleiner */
+        height: 68vh;
         transform: scale(0.94);
         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
@@ -188,7 +188,7 @@
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      display: none; /* Desktop aus */
+      display: none;
       gap: 8px;
       z-index: 30;
     }
