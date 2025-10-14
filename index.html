@@ -2,108 +2,140 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Juri Prinz Photography</title>
 
+  <!-- GSAP (für Mobile: Inertia + Snap) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
+
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
+    /* ==== Design-Parameter ==== */
     :root{
-      /* >>> diese beiden Werte steuern Optik <<< */
-      --edge-angle: 25deg;   /* sichtbarer Schrägwinkel der Kanten */
-      --gap: 6px;            /* dünne schwarze Trennlinie (Desktop) */
-      --gap-mobile: 4px;     /* Mobile */
-      --edge-width: 9%;      /* wie breit die „abgeschnittene“ schräge Kante ist */
+      --cut-desktop: 9%;       /* Schräge der Außenkanten (Desktop) */
+      --cut-mobile: 7%;        /* Schräge (Mobile) */
+      --gap: 6px;              /* dünne schwarze Trennlinie Desktop */
+      --gap-mobile: 4px;       /* dünne Trennlinie Mobile */
+      --menu-glow-outer: 36px; /* Glow im GTA-Menü */
+      --menu-glow-inner: 14px;
     }
 
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
     body{
-      background:#000;color:#fff;overflow-x:hidden;height:100vh;
+      background:#000; color:#fff; overflow-x:hidden;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     }
 
-    /* Logo */
-    header{position:fixed;top:-30px;left:50%;transform:translateX(-50%);z-index:30;pointer-events:none}
-    header img{width:185px;max-width:45vw;height:auto}
+    /* ====== Logo ====== */
+    header{
+      position:fixed; top:-30px; left:50%; transform:translateX(-50%);
+      z-index:30; pointer-events:none; text-align:center;
+    }
+    header img{ width:185px; max-width:45vw; height:auto }
 
-    /* Hamburger */
-    .hamburger{position:fixed;top:40px;right:40px;width:30px;height:22px;z-index:40;cursor:pointer}
-    .hamburger span{display:block;height:3px;background:#fff;border-radius:3px;margin:5px 0}
+    /* ====== Hamburger ====== */
+    .hamburger{
+      position:fixed; top:40px; right:40px; width:30px; height:22px;
+      z-index:40; cursor:pointer;
+    }
+    .hamburger span{
+      display:block; height:3px; width:100%; background:#fff; border-radius:3px; margin:5px 0; transition:.25s;
+    }
+    .hamburger.active span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
+    .hamburger.active span:nth-child(2){ opacity:0; }
+    .hamburger.active span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
 
-    /* Menü (Liquid-Glas) */
-    .menu-overlay{position:fixed;inset:0;z-index:25;display:flex;align-items:center;justify-content:center;
-      backdrop-filter: blur(22px) saturate(170%); background:rgba(18,18,18,.6); opacity:0;pointer-events:none;transition:.3s}
-    .menu-overlay.active{opacity:1;pointer-events:auto}
-    .menu-overlay ul{list-style:none;text-align:center}
-    .menu-overlay li{font-size:2rem;margin:18px 0;opacity:0;transform:translateY(14px);transition:.35s}
-    .menu-overlay.active li{opacity:1;transform:translateY(0)}
-    .menu-overlay li:hover{ text-shadow:0 0 36px rgba(255,255,255,.65),0 0 14px rgba(255,255,255,.3) }
-
-    /* Haupt-Objekt */
-    .sections{
-      position:relative;display:flex;align-items:center;height:100vh;overflow:hidden;
-      padding:18vh 0 7vh;gap:var(--gap); /* Abstand zwischen Kacheln = dünne schwarze Linie */
+    /* ====== Menü (Liquid-Glas mit stärkerem Glow) ====== */
+    .menu-overlay{
+      position:fixed; inset:0; z-index:25; display:flex; align-items:center; justify-content:center;
+      backdrop-filter: blur(22px) saturate(170%); background:rgba(18,18,18,.60);
+      opacity:0; pointer-events:none; transition:opacity .35s ease;
+    }
+    .menu-overlay.active{ opacity:1; pointer-events:auto; }
+    .menu-overlay ul{ list-style:none; text-align:center; }
+    .menu-overlay li{
+      font-size:2rem; font-weight:500; letter-spacing:.5px; margin:18px 0;
+      opacity:0; transform:translateY(14px); transition:.35s;
+    }
+    .menu-overlay.active li{ opacity:1; transform:translateY(0); }
+    .menu-overlay li:hover{
+      text-shadow:0 0 var(--menu-glow-outer) rgba(255,255,255,.65),
+                  0 0 var(--menu-glow-inner) rgba(255,255,255,.30);
+      cursor:pointer;
     }
 
-    /* Kachel-Container bleibt rechteckig */
+    /* ====== Haupt-Objekt (6 Kacheln) ====== */
+    .sections{
+      position:relative; display:flex; align-items:center; height:100vh; overflow:hidden;
+      padding:18vh 0 7vh; gap:var(--gap);
+    }
     .section{
-      position:relative;flex:1;height:80vh;border-radius:12px;overflow:hidden;background:#000;
+      position:relative; flex:1; height:80vh; border-radius:12px; overflow:hidden; background:#000;
       transition:transform .28s ease, filter .28s ease, box-shadow .28s ease; isolation:isolate;
+      /* Schräg geschnittene Außenkanten – dicht an dicht */
+      clip-path: polygon(var(--cut-desktop) 0, 100% 0, calc(100% - var(--cut-desktop)) 100%, 0 100%);
     }
     .section img{
-      width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);
+      width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.06);
       transition:transform .28s ease;
     }
-
-    /* Schräge Außenkanten: zwei schmale schwarze Überlagerungen */
-    .section::before,
-    .section::after{
-      content:"";position:absolute;top:-10%;bottom:-10%;width:var(--edge-width);background:#000;z-index:2;
-      pointer-events:none;
-    }
-    /* linke schräge Kante */
-    .section::before{
-      left:-2%; transform: skewX(var(--edge-angle)); transform-origin:left top;
-    }
-    /* rechte schräge Kante (gegengesetzt) */
-    .section::after{
-      right:-2%; transform: skewX(calc(-1 * var(--edge-angle))); transform-origin:right top;
-    }
-
-    /* Titel sauber mittig unten */
     .section h2{
-      position:absolute;left:0;right:0;bottom:26px;text-align:center;font-size:1.6rem;font-weight:600;
-      letter-spacing:.3px;text-shadow:0 0 10px rgba(0,0,0,.6);pointer-events:none;
-      z-index:3;
+      position:absolute; left:0; right:0; bottom:26px; text-align:center;
+      font-size:1.6rem; font-weight:600; letter-spacing:.3px;
+      text-shadow:0 0 10px rgba(0,0,0,.6); pointer-events:none; z-index:2;
     }
 
-    /* GTA-Hover-Logik */
-    .sections:hover .section{ filter:grayscale(100%) brightness(.75) }
-    .section:hover{ filter:none !important; transform:scale(1.03); box-shadow:0 0 30px rgba(255,255,255,.14); z-index:10 }
+    /* GTA-Hover: nicht aktive dimmen + s/w, aktive leicht größer + Glow */
+    .sections:hover .section{ filter:grayscale(100%) brightness(.75); }
+    .section:hover{
+      filter:none !important; transform:scale(1.03); box-shadow:0 0 30px rgba(255,255,255,.14); z-index:10;
+    }
 
-    /* Mobile: Snap-Carousel, dichter Look */
+    /* ====== Mobile (Snap-Carousel) ====== */
     @media (max-width:900px){
-      .sections{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-        padding-top:23vh; padding-bottom:10vh; gap:var(--gap-mobile); }
-      .section{ flex:0 0 92%; min-width:92%; height:68vh; border-radius:18px; scroll-snap-align:center; transform:scale(.96) }
-      .section.active{ transform:scale(1) }
-      .section h2{ bottom:22px; font-size:1.45rem }
-      .section::before{ left:-3% }
-      .section::after{ right:-3% }
+      .sections{
+        overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+        padding-top:23vh; padding-bottom:10vh; gap:var(--gap-mobile);
+      }
+      .section{
+        flex:0 0 92%; min-width:92%; height:68vh; border-radius:18px; scroll-snap-align:center; transform:scale(.96);
+        clip-path: polygon(var(--cut-mobile) 0, 100% 0, calc(100% - var(--cut-mobile)) 100%, 0 100%);
+      }
+      .section.active{ transform:scale(1); }
+      .section h2{ bottom:22px; font-size:1.45rem; }
     }
+
+    /* Dots nur Mobile */
+    .dots{ position:fixed; bottom:40px; left:50%; transform:translateX(-50%); display:none; gap:8px; z-index:35; }
+    .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.3); transition:.25s; }
+    .dot.active{ background:#fff; transform:scale(1.3); }
+    @media (max-width:900px){ .dots{ display:flex } }
   </style>
 </head>
 <body>
-  <header><img src="img/logo_inverted.png" alt="Juri Prinz Photography"></header>
+  <!-- Logo -->
+  <header>
+    <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
+  </header>
 
+  <!-- Hamburger -->
   <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
 
+  <!-- GTA-Menü -->
   <div class="menu-overlay" id="menu">
     <ul>
-      <li>Portrait</li><li>Event</li><li>Landscape</li>
-      <li>Corporate</li><li>About</li><li>Behind the Scenes</li>
+      <li>Portrait</li>
+      <li>Event</li>
+      <li>Landscape</li>
+      <li>Corporate</li>
+      <li>About</li>
+      <li>Behind the Scenes</li>
     </ul>
   </div>
 
-  <!-- 6 Abschnitte – Bilder aus deinem img/ Ordner -->
+  <!-- Hauptobjekt mit 6 Sektionen -->
   <div class="sections" id="sections">
     <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
     <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
@@ -113,30 +145,68 @@
     <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
   </div>
 
-  <!-- Dots (nur Mobile) -->
-  <div class="dots" id="dots" style="display:none"></div>
+  <!-- Dots (nur Mobile sichtbar) -->
+  <div class="dots" id="dots">
+    <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
 
   <script>
-    // Hamburger Toggle
+    // Hamburger → Menü
     const burger = document.getElementById('hamburger');
     const menu = document.getElementById('menu');
-    burger.addEventListener('click', () => menu.classList.toggle('active'));
+    burger.addEventListener('click', ()=>{
+      burger.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
 
-    // Optional: Mobile Snap-„Active“-Zustand (ohne externe Libs)
+    // ===== Mobile: GSAP Draggable + Inertia + Snap =====
     const container = document.getElementById('sections');
     const slides = Array.from(container.querySelectorAll('.section'));
-    function activateClosest(){
-      const mid = container.scrollLeft + container.clientWidth/2;
-      let best = 0, bestDist = Infinity;
-      slides.forEach((s,i)=>{
-        const cx = s.offsetLeft + s.clientWidth/2;
-        const d = Math.abs(cx - mid);
-        if(d < bestDist){ best=i; bestDist=d; }
-      });
-      slides.forEach((s,i)=>s.classList.toggle('active', i===best));
+    const dots   = Array.from(document.querySelectorAll('.dot'));
+    let activeIndex = 0;
+
+    function setActive(i){
+      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+      dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
+      activeIndex = i;
     }
-    container.addEventListener('scroll', ()=>{ if (window.matchMedia('(max-width:900px)').matches) activateClosest(); });
-    activateClosest();
+    function scrollToIndex(i, dur=0.7){
+      i = Math.max(0, Math.min(slides.length-1, i));
+      const sl = slides[i];
+      const target = sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2;
+      gsap.to(container, {scrollLeft: target, duration: dur, ease: "power3.out"});
+      setActive(i);
+    }
+
+    // nur aktivieren, wenn Mobile
+    if (window.matchMedia("(max-width: 900px)").matches){
+      const proxy = document.createElement("div");
+      const getGap = () => parseFloat(getComputedStyle(container).gap || 0);
+      const slideW = () => slides[0].clientWidth + getGap();
+      const maxScroll = () => container.scrollWidth - container.clientWidth;
+
+      Draggable.create(proxy, {
+        type:"x", inertia:true,
+        onDrag:      function(){ container.scrollLeft = -this.x; },
+        onThrowUpdate:function(){ container.scrollLeft = -this.x; },
+        bounds: { minX: -maxScroll(), maxX: 0 },
+        snap: (endX) => {
+          const idx = Math.round((-endX) / slideW());
+          scrollToIndex(idx, .55);
+          const sl = slides[Math.max(0, Math.min(slides.length-1, idx))];
+          return - (sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2);
+        }
+      });
+
+      // Fallback: beim Scrollen aktiven Punkt setzen
+      container.addEventListener('scroll', ()=>{
+        const idx = Math.round(container.scrollLeft / slideW());
+        if (idx !== activeIndex) setActive(idx);
+      });
+
+      setActive(0);
+    }
   </script>
 </body>
 </html>
