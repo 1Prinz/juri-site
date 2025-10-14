@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juri Prinz Photography</title>
   <link rel="stylesheet" href="styles.css" />
+  <!-- GSAP & Inertia -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -18,7 +21,7 @@
     /* ===== LOGO ===== */
     header {
       position: fixed;
-      top: -30px; /* vorher 18px → jetzt ca. 3 cm höher */
+      top: -30px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 30;
@@ -79,10 +82,7 @@
       pointer-events: all;
     }
 
-    .menu-overlay ul {
-      list-style: none;
-      text-align: center;
-    }
+    .menu-overlay ul { list-style: none; text-align: center; }
     .menu-overlay li {
       font-size: 2rem;
       font-weight: 500;
@@ -108,7 +108,7 @@
       height: 100vh;
       overflow: hidden;
       align-items: center;
-      padding-top: 18vh; /* vorher 14vh → jetzt ca. 2 cm tiefer */
+      padding-top: 18vh;
       padding-bottom: 6vh;
     }
     .section {
@@ -117,9 +117,9 @@
       overflow: hidden;
       transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
-      clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-      margin: 0 4px;
-      border-radius: 14px;
+      clip-path: polygon(18% 0, 100% 0, 82% 100%, 0% 100%); /* mehr Neigung */
+      margin: 0 8px; /* dezenter Abstand */
+      border-radius: 10px;
       height: 80vh;
     }
     .section img {
@@ -153,33 +153,25 @@
     /* ===== MOBILE CAROUSEL ===== */
     @media (max-width: 900px) {
       .sections {
-        overflow-x: auto;
+        overflow-x: scroll;
+        display: flex;
         scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
-        padding-top: 23vh; /* angepasst */
+        padding-top: 23vh;
         padding-bottom: 10vh;
       }
       .section {
         flex: 0 0 78%;
         min-width: 78%;
-        margin: 0 11%;
-        border-radius: 20px;
-        clip-path: none;
-        scroll-snap-align: center;
+        margin: 0 6px;
+        clip-path: polygon(18% 0, 100% 0, 82% 100%, 0% 100%);
+        border-radius: 18px;
         height: 68vh;
         transform: scale(0.94);
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
-      .section.active {
-        transform: scale(1);
-      }
-      .section img {
-        border-radius: 20px;
-      }
-      .dots {
-        display: flex;
-      }
+      .section.active { transform: scale(1); }
+      .section img { border-radius: 18px; }
+      .dots { display: flex; }
     }
 
     /* ===== DOT NAV ===== */
@@ -207,7 +199,7 @@
 </head>
 <body>
   <header>
-    <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
+    <img src="img/logo.svg" alt="Juri Prinz Photography" />
   </header>
 
   <div class="hamburger" id="hamburger">
@@ -226,12 +218,12 @@
   </div>
 
   <div class="sections" id="sections">
-    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
-    <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
-    <div class="section"><img src="img/IMG_3274_final.jpg" alt=""><h2>Landscape</h2></div>
-    <div class="section"><img src="img/IMG_4213.JPG" alt=""><h2>Corporate</h2></div>
+    <div class="section"><img src="img/portrait.jpg" alt=""><h2>Portrait</h2></div>
+    <div class="section"><img src="img/event.jpg" alt=""><h2>Event</h2></div>
+    <div class="section"><img src="img/landscape.jpg" alt=""><h2>Landscape</h2></div>
+    <div class="section"><img src="img/corporate.jpg" alt=""><h2>Corporate</h2></div>
     <div class="section"><img src="img/about1.jpg" alt=""><h2>About</h2></div>
-    <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
+    <div class="section"><img src="img/about2.jpg" alt=""><h2>Behind the Scenes</h2></div>
   </div>
 
   <div class="dots" id="dots">
@@ -252,19 +244,52 @@
       menu.classList.toggle('active');
     });
 
-    // Mobile Scroll Snapping Dots
-    const sections = document.getElementById('sections');
+    // Mobile GSAP ScrollSnap
+    const container = document.getElementById('sections');
     const dots = document.querySelectorAll('.dot');
+
+    let sections = Array.from(container.children);
     let activeIndex = 0;
-    sections.addEventListener('scroll', () => {
-      const scrollLeft = sections.scrollLeft;
-      const width = sections.clientWidth * 0.78;
-      const newIndex = Math.round(scrollLeft / width);
-      if (newIndex !== activeIndex) {
-        activeIndex = newIndex;
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === newIndex));
+
+    // Scroll via GSAP Inertia
+    let proxy = { x: 0 };
+    let transformProp = gsap.utils.checkPrefix("transform");
+
+    function updateActive(index) {
+      dots.forEach((d,i)=>d.classList.toggle("active",i===index));
+      sections.forEach((s,i)=>s.classList.toggle("active",i===index));
+    }
+
+    function scrollToIndex(index) {
+      index = Math.max(0, Math.min(sections.length - 1, index));
+      let targetX = sections[index].offsetLeft - (container.clientWidth - sections[index].clientWidth) / 2;
+      gsap.to(container, { scrollLeft: targetX, duration: 0.8, ease: "power3.out" });
+      updateActive(index);
+      activeIndex = index;
+    }
+
+    let drag = Draggable.create(proxy, {
+      type: "x",
+      inertia: true,
+      bounds: { minX: 0, maxX: container.scrollWidth - container.clientWidth },
+      onDrag: updateScroll,
+      onThrowUpdate: updateScroll,
+      snap: (endValue) => {
+        let index = Math.round((endValue / (container.scrollWidth - container.clientWidth)) * (sections.length - 1));
+        scrollToIndex(index);
+        return endValue;
       }
     });
+
+    function updateScroll() {
+      container.scrollLeft = -this.x;
+      let index = Math.round(container.scrollLeft / (sections[0].clientWidth * 0.8));
+      if(index !== activeIndex) {
+        updateActive(index);
+        activeIndex = index;
+      }
+    }
+
   </script>
 </body>
 </html>
