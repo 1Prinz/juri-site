@@ -5,41 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juri Prinz Photography</title>
 
-  <!-- GSAP & Plugins -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root{
-      --tilt-pct: 25; /* Neigung in % */
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      overflow-x: hidden;
-      height: 100vh;
-    }
+    :root { --skew: -14deg; }
+    body { background: #000; color: #fff; overflow-x: hidden; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
-    /* ===== LOGO (bleibt wie vereinbart: höher & größer) ===== */
     header {
       position: fixed;
-      top: -30px;              /* ~3 cm höher */
+      top: -30px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 30;
       text-align: center;
       pointer-events: none;
     }
-    header img {
-      width: 185px;
-      max-width: 45vw;
-      height: auto;
-    }
+    header img { width: 185px; max-width: 45vw; height: auto; }
 
-    /* ===== HAMBURGER ===== */
     .hamburger {
       position: fixed;
       top: 40px;
@@ -59,11 +40,7 @@
       margin: 5px 0;
       transition: 0.3s;
     }
-    .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-    /* ===== MENU OVERLAY (Liquid Glass) ===== */
     .menu-overlay {
       position: fixed;
       inset: 0;
@@ -78,123 +55,94 @@
       justify-content: center;
       align-items: center;
     }
-    .menu-overlay.active { opacity: 1; pointer-events: all; }
 
+    .menu-overlay.active { opacity: 1; pointer-events: all; }
     .menu-overlay ul { list-style: none; text-align: center; }
     .menu-overlay li {
       font-size: 2rem;
-      font-weight: 500;
       margin: 18px 0;
-      letter-spacing: 1px;
       opacity: 0;
       transform: translateY(15px);
       transition: all 0.4s ease;
     }
     .menu-overlay.active li { opacity: 1; transform: translateY(0); }
-    /* Glow +25% stärker */
     .menu-overlay li:hover {
-      color: #fff;
-      text-shadow: 0 0 32px rgba(255,255,255,0.60), 0 0 12px rgba(255,255,255,0.25);
+      text-shadow: 0 0 32px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.25);
       cursor: pointer;
     }
 
-    /* ===== SECTIONS (DESKTOP) ===== */
     .sections {
       display: flex;
       height: 100vh;
-      overflow: hidden;
       align-items: center;
-      padding-top: 18vh;   /* mittleres Objekt etwas tiefer */
-      padding-bottom: 6vh;
-      background: #000;    /* für feine schwarze Trennlinien */
+      gap: 6px;
+      padding: 0 6px;
     }
 
     .section {
       flex: 1;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      /* Deutlichere Neigung über Clip-Path (25%) */
-      clip-path: polygon(calc(var(--tilt-pct)*1% ) 0, 100% 0, calc(100% - var(--tilt-pct)*1%) 100%, 0% 100%);
-      border-radius: 12px;
       height: 80vh;
-      margin: 0 2px; /* hauchdünne schwarze Trennlinie */
+      border-radius: 12px;
+      overflow: hidden;
+      transform: skewX(var(--skew));
       transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
     }
+
+    .section .inner {
+      height: 100%;
+      transform: skewX(calc(var(--skew) * -1));
+      position: relative;
+    }
+
     .section img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s ease;
       display: block;
+      transform: scale(1.06);
+      transition: transform 0.3s ease;
     }
+
     .section h2 {
       position: absolute;
       bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
+      text-align: center;
       font-size: 1.6rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
       text-shadow: 0 0 10px rgba(0,0,0,0.6);
       pointer-events: none;
-      white-space: nowrap;
     }
 
-    /* GTA-Hover-Verhalten */
     .sections:hover .section { filter: grayscale(100%) brightness(0.75); }
     .section:hover {
-      transform: scale(1.03);
+      transform: skewX(var(--skew)) scale(1.03);
       filter: none !important;
       box-shadow: 0 0 30px rgba(255,255,255,0.14);
       z-index: 10;
     }
 
-    /* ===== MOBILE CAROUSEL ===== */
     @media (max-width: 900px) {
       .sections {
         overflow-x: scroll;
         scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
         padding-top: 23vh;
         padding-bottom: 10vh;
-        gap: 0;           /* Lückenlos, wir steuern über margin */
+        gap: 4px;
       }
       .section {
-        /* ~15% breiter als vorher: 90% statt 78% */
-        flex: 0 0 95%;
-        min-width: 90%;
-        margin: 0 5%;     /* zeigt Nachbarn dezent, da 90% + 2*5% = 100% */
-        clip-path: polygon(calc(var(--tilt-pct)*1% ) 0, 100% 0, calc(100% - var(--tilt-pct)*1%) 100%, 0% 100%);
-        border-radius: 18px;
+        flex: 0 0 92%;
+        min-width: 92%;
         height: 68vh;
-        transform: scale(0.96);
+        border-radius: 18px;
         scroll-snap-align: center;
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: skewX(var(--skew)) scale(0.96);
       }
-      .section.active { transform: scale(1); }
+      .section.active { transform: skewX(var(--skew)) scale(1); }
       .section img { border-radius: 18px; }
-
-      .dots { display: flex; }
     }
-
-    /* ===== DOT NAV (nur Mobile) ===== */
-    .dots {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: none;
-      gap: 8px;
-      z-index: 30;
-    }
-    .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      transition: 0.3s;
-    }
-    .dot.active { background: #fff; transform: scale(1.3); }
   </style>
 </head>
 <body>
@@ -217,93 +165,22 @@
     </ul>
   </div>
 
-  <!-- Haupt-Objekt mit 6 Sektionen -->
-  <div class="sections" id="sections">
-    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt="Portrait"><h2>Portrait</h2></div>
-    <div class="section"><img src="img/20190109_160131.jpg" alt="Event"><h2>Event</h2></div>
-    <div class="section"><img src="img/IMG_3274_final.jpg" alt="Landscape"><h2>Landscape</h2></div>
-    <div class="section"><img src="img/IMG_4213.JPG" alt="Corporate"><h2>Corporate</h2></div>
-    <div class="section"><img src="img/about1.jpg" alt="About"><h2>About</h2></div>
-    <div class="section"><img src="img/rmoF60ubT3I.jpg" alt="Behind the Scenes"><h2>Behind the Scenes</h2></div>
-  </div>
-
-  <div class="dots" id="dots">
-    <div class="dot active"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+  <div class="sections">
+    <div class="section"><div class="inner"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt="Portrait"><h2>Portrait</h2></div></div>
+    <div class="section"><div class="inner"><img src="img/20190109_160131.jpg" alt="Event"><h2>Event</h2></div></div>
+    <div class="section"><div class="inner"><img src="img/IMG_3274_final.jpg" alt="Landscape"><h2>Landscape</h2></div></div>
+    <div class="section"><div class="inner"><img src="img/IMG_4213.JPG" alt="Corporate"><h2>Corporate</h2></div></div>
+    <div class="section"><div class="inner"><img src="img/about1.jpg" alt="About"><h2>About</h2></div></div>
+    <div class="section"><div class="inner"><img src="img/rmoF60ubT3I.jpg" alt="Behind the Scenes"><h2>Behind the Scenes</h2></div></div>
   </div>
 
   <script>
-    // === Hamburger Toggle ===
     const burger = document.getElementById('hamburger');
     const menu = document.getElementById('menu');
     burger.addEventListener('click', () => {
       burger.classList.toggle('active');
       menu.classList.toggle('active');
     });
-
-    // === Mobile: GSAP Draggable + Inertia + Snap ===
-    const container = document.getElementById('sections');
-    const dots = document.querySelectorAll('.dot');
-    const slides = Array.from(container.children);
-    let activeIndex = 0;
-
-    function updateActive(i) {
-      dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
-      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
-    }
-
-    function indexFromScroll() {
-      const slideW = slides[0].getBoundingClientRect().width;
-      const idx = Math.round(container.scrollLeft / slideW);
-      return Math.max(0, Math.min(slides.length - 1, idx));
-    }
-
-    function scrollToIndex(i, dur=0.8) {
-      i = Math.max(0, Math.min(slides.length - 1, i));
-      const target = slides[i].offsetLeft - (container.clientWidth - slides[i].clientWidth)/2;
-      gsap.to(container, { scrollLeft: target, duration: dur, ease: "power3.out" });
-      updateActive(i);
-      activeIndex = i;
-    }
-
-    // Draggable auf einem Proxy, der scrollLeft steuert
-    const proxy = document.createElement("div");
-    let maxScroll = () => container.scrollWidth - container.clientWidth;
-
-    Draggable.create(proxy, {
-      type: "x",
-      inertia: true,
-      onDrag: function(){ container.scrollLeft = -this.x; },
-      onThrowUpdate: function(){ container.scrollLeft = -this.x; },
-      bounds: { minX: -maxScroll(), maxX: 0 },
-      snap: (endX) => {
-        // Snap auf nächstgelegene Slide-Mitte
-        const slideW = slides[0].clientWidth;
-        const rawScroll = -endX;
-        const idx = Math.round(rawScroll / slideW);
-        const targetLeft = slides[Math.max(0, Math.min(slides.length-1, idx))].offsetLeft - (container.clientWidth - slideW)/2;
-        // Setze finalen Scroll und gib korrespondierenden x zurück
-        gsap.to(container, { scrollLeft: targetLeft, duration: 0.6, ease: "power3.out" });
-        updateActive(Math.max(0, Math.min(slides.length-1, idx)));
-        return -targetLeft;
-      }
-    });
-
-    // Sync dot state bei normalem Scroll (Fallback)
-    container.addEventListener('scroll', () => {
-      const idx = indexFromScroll();
-      if (idx !== activeIndex) {
-        activeIndex = idx;
-        updateActive(idx);
-      }
-    });
-
-    // Initial aktives Element setzen (Mitte optional)
-    updateActive(0);
   </script>
 </body>
 </html>
