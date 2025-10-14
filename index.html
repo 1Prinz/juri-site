@@ -49,4 +49,177 @@
       font-size:2rem; margin:18px 0; opacity:0; transform:translateY(14px); transition:.35s;
     }
     .menu-overlay.active li{opacity:1; transform:translateY(0)}
-    .menu-overlay li:hover{ text-shadow:
+    .menu-overlay li:hover{ text-shadow:0 0 36px rgba(255,255,255,.65),0 0 14px rgba(255,255,255,.3) }
+
+    /* Haupt-Objekt */
+    .sections{
+      position:relative; display:flex; align-items:center; height:100vh; overflow:hidden;
+      padding: 18vh 0 7vh; gap: var(--gap);
+    }
+
+    /* Jede Kachel = rechteckiger Container, innen ein „Blade“ wird geneigt */
+    .section{
+      position:relative; flex:1; height:80vh; border-radius:12px; overflow:hidden;
+      background:#000;
+      transition:transform .28s ease, filter .28s ease, box-shadow .28s ease;
+      isolation:isolate; /* sichere z-index überblendung */
+    }
+
+    /* die schrägen Seiten werden durch das geneigte Blade erzeugt */
+    .blade{
+      position:absolute; inset:-12%;                     /* größer, damit keine Lücken am Rand */
+      transform: skewX(var(--blade-skew)) scale(1.08);   /* Schräg + leicht größer */
+      transform-origin:center;
+    }
+    .blade img{
+      position:absolute; inset:0;
+      width:100%; height:100%; object-fit:cover;
+      /* gegen-skew, damit das Foto selbst nicht schräg wirkt */
+      transform: skewX(calc(var(--blade-skew) * -1)) scale(1.06);
+      transform-origin:center;
+      display:block;
+    }
+
+    /* Titel wirklich mittig unten */
+    .section h2{
+      position:absolute; left:0; right:0; bottom:26px; text-align:center;
+      font-size:1.6rem; font-weight:600; letter-spacing:.3px;
+      text-shadow:0 0 10px rgba(0,0,0,.6); pointer-events:none;
+    }
+
+    /* GTA-Hover: alle dimmen + grau; aktives leicht zoomen + Glow */
+    .sections:hover .section{ filter: grayscale(100%) brightness(.75) }
+    .section:hover{
+      filter:none !important;
+      transform: scale(1.03);
+      box-shadow:0 0 30px rgba(255,255,255,.14);
+      z-index:10;
+    }
+
+    /* Mobile: Snap-Carousel mit dichterem Look */
+    @media (max-width: 900px){
+      .sections{
+        overflow-x: auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+        padding-top:23vh; padding-bottom:10vh; gap: var(--gap-mobile);
+      }
+      .section{
+        flex: 0 0 92%; min-width:92%; height:68vh; border-radius:18px; scroll-snap-align:center;
+        transform: scale(.96); /* ruhige Default-Skalierung */
+      }
+      .section.active{ transform: scale(1) }
+      .section h2{ bottom:22px; font-size:1.45rem }
+    }
+
+    /* Dots nur Mobile */
+    .dots{ position:fixed; bottom:40px; left:50%; transform:translateX(-50%); display:none; gap:8px; z-index:35 }
+    .dot{ width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3); transition:.25s }
+    .dot.active{ background:#fff; transform:scale(1.3) }
+    @media (max-width:900px){ .dots{ display:flex } }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="img/logo_inverted.png" alt="Juri Prinz Photography">
+  </header>
+
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+
+  <div class="menu-overlay" id="menu">
+    <ul>
+      <li>Portrait</li>
+      <li>Event</li>
+      <li>Landscape</li>
+      <li>Corporate</li>
+      <li>About</li>
+      <li>Behind the Scenes</li>
+    </ul>
+  </div>
+
+  <!-- HAUPTOBJEKT -->
+  <div class="sections" id="sections">
+    <div class="section">
+      <div class="blade"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""></div>
+      <h2>Portrait</h2>
+    </div>
+    <div class="section">
+      <div class="blade"><img src="img/20190109_160131.jpg" alt=""></div>
+      <h2>Event</h2>
+    </div>
+    <div class="section">
+      <div class="blade"><img src="img/IMG_3274_final.jpg" alt=""></div>
+      <h2>Landscape</h2>
+    </div>
+    <div class="section">
+      <div class="blade"><img src="img/IMG_4213.JPG" alt=""></div>
+      <h2>Corporate</h2>
+    </div>
+    <div class="section">
+      <div class="blade"><img src="img/about1.jpg" alt=""></div>
+      <h2>About</h2>
+    </div>
+    <div class="section">
+      <div class="blade"><img src="img/rmoF60ubT3I.jpg" alt=""></div>
+      <h2>Behind the Scenes</h2>
+    </div>
+  </div>
+
+  <!-- Dots (nur Mobile) -->
+  <div class="dots" id="dots">
+    <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <script>
+    // Hamburger
+    const burger = document.getElementById('hamburger');
+    const menu = document.getElementById('menu');
+    burger.addEventListener('click', () => menu.classList.toggle('active'));
+
+    // Mobile Snap/Inertia
+    const container = document.getElementById('sections');
+    const slides = Array.from(container.querySelectorAll('.section'));
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    let active = 0;
+
+    function setActive(i){
+      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+      dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
+      active = i;
+    }
+
+    function scrollToIndex(i, dur=0.7){
+      i = Math.max(0, Math.min(slides.length-1, i));
+      const sl = slides[i];
+      const target = sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2;
+      gsap.to(container, {scrollLeft: target, duration: dur, ease: "power3.out"});
+      setActive(i);
+    }
+
+    if (window.matchMedia("(max-width: 900px)").matches){
+      const proxy = document.createElement("div");
+      const maxScroll = () => container.scrollWidth - container.clientWidth;
+
+      Draggable.create(proxy, {
+        type:"x", inertia:true,
+        onDrag: function(){ container.scrollLeft = -this.x; },
+        onThrowUpdate: function(){ container.scrollLeft = -this.x; },
+        bounds: { minX: -maxScroll(), maxX: 0 },
+        snap: (endX) => {
+          const w = slides[0].clientWidth + parseFloat(getComputedStyle(container).gap || 0);
+          const idx = Math.round((-endX) / w);
+          scrollToIndex(idx, .55);
+          return - (slides[idx].offsetLeft - (container.clientWidth - slides[idx].clientWidth)/2);
+        }
+      });
+
+      container.addEventListener('scroll', () => {
+        const w = slides[0].clientWidth + parseFloat(getComputedStyle(container).gap || 0);
+        const idx = Math.round(container.scrollLeft / w);
+        if (idx !== active) setActive(idx);
+      });
+
+      setActive(0);
+    }
+  </script>
+</body>
+</html>
