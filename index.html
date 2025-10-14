@@ -5,182 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juri Prinz Photography</title>
 
+  <!-- GSAP (für Mobile Snap/Inertia) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root { --skew: -14deg; }
-    body { background: #000; color: #fff; overflow-x: hidden; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-
-    header {
-      position: fixed;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 30;
-      text-align: center;
-      pointer-events: none;
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --blade-skew: -14deg; /* ≈ deine „25%“ Neigung – bei Bedarf feiner justieren */
+      --gap: 6px;           /* hauchdünne Trennlinie (Desktop) */
+      --gap-mobile: 4px;    /* Mobile */
     }
-    header img { width: 185px; max-width: 45vw; height: auto; }
-
-    .hamburger {
-      position: fixed;
-      top: 40px;
-      right: 40px;
-      width: 30px;
-      height: 22px;
-      cursor: pointer;
-      z-index: 40;
-      transition: all 0.3s ease;
-    }
-    .hamburger span {
-      display: block;
-      height: 3px;
-      width: 100%;
-      background: #fff;
-      border-radius: 3px;
-      margin: 5px 0;
-      transition: 0.3s;
+    body{
+      background:#000;color:#fff;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      overflow-x:hidden;height:100vh;
     }
 
-    .menu-overlay {
-      position: fixed;
-      inset: 0;
-      backdrop-filter: blur(22px) saturate(170%);
-      background-color: rgba(20, 20, 20, 0.6);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      z-index: 25;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    /* Logo */
+    header{
+      position:fixed; top:-30px; left:50%;
+      transform:translateX(-50%); z-index:30; pointer-events:none;
     }
+    header img{ width:185px; max-width:45vw; height:auto }
 
-    .menu-overlay.active { opacity: 1; pointer-events: all; }
-    .menu-overlay ul { list-style: none; text-align: center; }
-    .menu-overlay li {
-      font-size: 2rem;
-      margin: 18px 0;
-      opacity: 0;
-      transform: translateY(15px);
-      transition: all 0.4s ease;
+    /* Hamburger */
+    .hamburger{
+      position:fixed; top:40px; right:40px; width:30px; height:22px;
+      z-index:40; cursor:pointer;
     }
-    .menu-overlay.active li { opacity: 1; transform: translateY(0); }
-    .menu-overlay li:hover {
-      text-shadow: 0 0 32px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.25);
-      cursor: pointer;
+    .hamburger span{display:block;height:3px;background:#fff;border-radius:3px;margin:5px 0;transition:.25s}
+
+    /* Menü (Liquid-Glas + stärkerer Glow) */
+    .menu-overlay{
+      position:fixed; inset:0; z-index:25; display:flex; align-items:center; justify-content:center;
+      backdrop-filter: blur(22px) saturate(170%); background:rgba(18,18,18,.6);
+      opacity:0; pointer-events:none; transition:.35s;
     }
-
-    .sections {
-      display: flex;
-      height: 100vh;
-      align-items: center;
-      gap: 6px;
-      padding: 0 6px;
+    .menu-overlay.active{opacity:1; pointer-events:auto}
+    .menu-overlay ul{list-style:none; text-align:center}
+    .menu-overlay li{
+      font-size:2rem; margin:18px 0; opacity:0; transform:translateY(14px); transition:.35s;
     }
-
-    .section {
-      flex: 1;
-      height: 80vh;
-      border-radius: 12px;
-      overflow: hidden;
-      transform: skewX(var(--skew));
-      transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-
-    .section .inner {
-      height: 100%;
-      transform: skewX(calc(var(--skew) * -1));
-      position: relative;
-    }
-
-    .section img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transform: scale(1.06);
-      transition: transform 0.3s ease;
-    }
-
-    .section h2 {
-      position: absolute;
-      bottom: 30px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 600;
-      text-shadow: 0 0 10px rgba(0,0,0,0.6);
-      pointer-events: none;
-    }
-
-    .sections:hover .section { filter: grayscale(100%) brightness(0.75); }
-    .section:hover {
-      transform: skewX(var(--skew)) scale(1.03);
-      filter: none !important;
-      box-shadow: 0 0 30px rgba(255,255,255,0.14);
-      z-index: 10;
-    }
-
-    @media (max-width: 900px) {
-      .sections {
-        overflow-x: scroll;
-        scroll-snap-type: x mandatory;
-        padding-top: 23vh;
-        padding-bottom: 10vh;
-        gap: 4px;
-      }
-      .section {
-        flex: 0 0 92%;
-        min-width: 92%;
-        height: 68vh;
-        border-radius: 18px;
-        scroll-snap-align: center;
-        transform: skewX(var(--skew)) scale(0.96);
-      }
-      .section.active { transform: skewX(var(--skew)) scale(1); }
-      .section img { border-radius: 18px; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
-  </header>
-
-  <div class="hamburger" id="hamburger">
-    <span></span><span></span><span></span>
-  </div>
-
-  <div class="menu-overlay" id="menu">
-    <ul>
-      <li>Portrait</li>
-      <li>Event</li>
-      <li>Landscape</li>
-      <li>Corporate</li>
-      <li>About</li>
-      <li>Behind the Scenes</li>
-    </ul>
-  </div>
-
-  <div class="sections">
-    <div class="section"><div class="inner"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt="Portrait"><h2>Portrait</h2></div></div>
-    <div class="section"><div class="inner"><img src="img/20190109_160131.jpg" alt="Event"><h2>Event</h2></div></div>
-    <div class="section"><div class="inner"><img src="img/IMG_3274_final.jpg" alt="Landscape"><h2>Landscape</h2></div></div>
-    <div class="section"><div class="inner"><img src="img/IMG_4213.JPG" alt="Corporate"><h2>Corporate</h2></div></div>
-    <div class="section"><div class="inner"><img src="img/about1.jpg" alt="About"><h2>About</h2></div></div>
-    <div class="section"><div class="inner"><img src="img/rmoF60ubT3I.jpg" alt="Behind the Scenes"><h2>Behind the Scenes</h2></div></div>
-  </div>
-
-  <script>
-    const burger = document.getElementById('hamburger');
-    const menu = document.getElementById('menu');
-    burger.addEventListener('click', () => {
-      burger.classList.toggle('active');
-      menu.classList.toggle('active');
-    });
-  </script>
-</body>
-</html>
+    .menu-overlay.active li{opacity:1; transform:translateY(0)}
+    .menu-overlay li:hover{ text-shadow:
