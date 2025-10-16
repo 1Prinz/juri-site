@@ -5,208 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Juri Prinz Photography</title>
 
-  <!-- GSAP (für Mobile: Inertia + Snap) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
-    /* ==== Design-Parameter ==== */
     :root{
-      --cut-desktop: 9%;       /* Schräge der Außenkanten (Desktop) */
-      --cut-mobile: 7%;        /* Schräge (Mobile) */
-      --gap: 6px;              /* dünne schwarze Trennlinie Desktop */
-      --gap-mobile: 4px;       /* dünne Trennlinie Mobile */
-      --menu-glow-outer: 36px; /* Glow im GTA-Menü */
-      --menu-glow-inner: 14px;
+      --glow: 28px;
+      --angle: -25deg;
+      --intro-duration: 4s; /* 1s in + 2s hold + 1s out */
     }
 
     *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      background:#000; color:#fff; overflow-x:hidden;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    }
+    html,body{height:100%;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden;}
 
-    /* ====== Logo ====== */
     header{
-      position:fixed; top:-30px; left:50%; transform:translateX(-50%);
-      z-index:30; pointer-events:none; text-align:center;
+      position:fixed;top:22px;left:50%;transform:translateX(-50%);
+      z-index:30;pointer-events:none;text-align:center;
     }
-    header img{ width:185px; max-width:45vw; height:auto }
+    header img{width:160px;max-width:40vw;height:auto;opacity:.95;}
 
-    /* ====== Hamburger ====== */
     .hamburger{
-      position:fixed; top:40px; right:40px; width:30px; height:22px;
-      z-index:40; cursor:pointer;
+      position:fixed;top:32px;right:32px;width:30px;height:22px;z-index:40;cursor:pointer;
     }
     .hamburger span{
-      display:block; height:3px; width:100%; background:#fff; border-radius:3px; margin:5px 0; transition:.25s;
+      display:block;height:3px;width:100%;background:#fff;border-radius:3px;margin:5px 0;transition:.25s;
     }
-    .hamburger.active span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
-    .hamburger.active span:nth-child(2){ opacity:0; }
-    .hamburger.active span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
+    .hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
 
-    /* ====== Menü (Liquid-Glas mit stärkerem Glow) ====== */
+    /* Menü */
     .menu-overlay{
-      position:fixed; inset:0; z-index:25; display:flex; align-items:center; justify-content:center;
-      backdrop-filter: blur(22px) saturate(170%); background:rgba(18,18,18,.60);
-      opacity:0; pointer-events:none; transition:opacity .35s ease;
+      position:fixed;inset:0;z-index:35;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      backdrop-filter: blur(22px) saturate(170%);
+      background:rgba(18,18,18,.60);
+      opacity:0;pointer-events:none;transition:opacity .35s ease;
     }
-    .menu-overlay.active{ opacity:1; pointer-events:auto; }
-    .menu-overlay ul{ list-style:none; text-align:center; }
-    .menu-overlay li{
-      font-size:2rem; font-weight:500; letter-spacing:.5px; margin:18px 0;
-      opacity:0; transform:translateY(14px); transition:.35s;
+    .menu-overlay.active{opacity:1;pointer-events:auto;}
+    .menu-nav{display:flex;flex-direction:column;align-items:center;}
+    .menu-list{list-style:none;text-align:center;margin:0;padding:0;}
+    .menu-link{
+      display:inline-block;font-size:2rem;font-weight:500;letter-spacing:.5px;margin:14px 0;
+      opacity:0;transform:translateY(14px);transition:.3s ease;text-decoration:none;color:#fff;
     }
-    .menu-overlay.active li{ opacity:1; transform:translateY(0); }
-    .menu-overlay li:hover{
-      text-shadow:0 0 var(--menu-glow-outer) rgba(255,255,255,.65),
-                  0 0 var(--menu-glow-inner) rgba(255,255,255,.30);
-      cursor:pointer;
+    .menu-overlay.active .menu-link{opacity:1;transform:translateY(0);}
+    .menu-link:hover{
+      transform:translateY(0) scale(1.15);
+      text-shadow:0 0 36px rgba(255,255,255,.65), 0 0 14px rgba(255,255,255,.3);
+    }
+    .socials{display:flex;gap:16px;margin-top:28px;flex-wrap:wrap;justify-content:center;
+             list-style:none;padding:0;}
+    .socials a{color:#fff;font-size:1.35rem;transition:.2s;}
+    .socials a:hover{transform:scale(1.12);text-shadow:0 0 10px #fff;}
+
+    /* HERO SECTION */
+    .slider{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    }
+    .slide{
+      position:absolute;width:65vw;max-width:1100px;transform:skewY(var(--angle));
+      border-radius:18px;overflow:hidden;box-shadow:0 0 90px rgba(0,0,0,.7);
+      transition:transform 1s ease,opacity 1s ease;
+      opacity:0;
+    }
+    .slide.active{opacity:1;transform:skewY(var(--angle)) scale(1.02);}
+    .slide img{width:100%;height:auto;display:block;}
+    .caption{
+      position:absolute;bottom:3%;left:50%;transform:translateX(-50%) skewY(calc(var(--angle) * -1));
+      font-size:2rem;font-weight:500;text-align:center;
+      text-shadow:0 0 20px rgba(255,255,255,.45);
     }
 
-    /* ====== Haupt-Objekt (6 Kacheln) ====== */
-    .sections{
-      position:relative; display:flex; align-items:center; height:100vh; overflow:hidden;
-      padding:18vh 0 7vh; gap:var(--gap);
-    }
-    .section{
-      position:relative; flex:1; height:80vh; border-radius:12px; overflow:hidden; background:#000;
-      transition:transform .28s ease, filter .28s ease, box-shadow .28s ease; isolation:isolate;
-      /* Schräg geschnittene Außenkanten – dicht an dicht */
-      clip-path: polygon(var(--cut-desktop) 0, 100% 0, calc(100% - var(--cut-desktop)) 100%, 0 100%);
-    }
-    .section img{
-      width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.06);
-      transition:transform .28s ease;
-    }
-    .section h2{
-      position:absolute; left:0; right:0; bottom:26px; text-align:center;
-      font-size:1.6rem; font-weight:600; letter-spacing:.3px;
-      text-shadow:0 0 10px rgba(0,0,0,.6); pointer-events:none; z-index:2;
+    @media(max-width:900px){
+      .slide{width:85vw;}
+      .caption{font-size:1.3rem;}
     }
 
-    /* GTA-Hover: nicht aktive dimmen + s/w, aktive leicht größer + Glow */
-    .sections:hover .section{ filter:grayscale(100%) brightness(.75); }
-    .section:hover{
-      filter:none !important; transform:scale(1.03); box-shadow:0 0 30px rgba(255,255,255,.14); z-index:10;
+    /* INTRO OVERLAY */
+    .intro{
+      position:fixed;inset:0;background:#000;z-index:9999;display:flex;
+      align-items:center;justify-content:center;pointer-events:auto;
+    }
+    .intro.hidden{display:none;}
+    .intro-logo{
+      opacity:0;
+      width:min(280px,50vw);
+      animation: logoFade var(--intro-duration) ease forwards;
+    }
+    @keyframes logoFade{
+      0%   {opacity:0}
+      25%  {opacity:1}   /* ~1s bei 4s total */
+      75%  {opacity:1}   /* hält ~2s */
+      100% {opacity:0}   /* ~1s Fade-out */
     }
 
-    /* ====== Mobile (Snap-Carousel) ====== */
-    @media (max-width:900px){
-      .sections{
-        overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-        padding-top:23vh; padding-bottom:10vh; gap:var(--gap-mobile);
-      }
-      .section{
-        flex:0 0 92%; min-width:92%; height:68vh; border-radius:18px; scroll-snap-align:center; transform:scale(.96);
-        clip-path: polygon(var(--cut-mobile) 0, 100% 0, calc(100% - var(--cut-mobile)) 100%, 0 100%);
-      }
-      .section.active{ transform:scale(1); }
-      .section h2{ bottom:22px; font-size:1.45rem; }
+    /* Motion-Reduce: Intro überspringen */
+    @media (prefers-reduced-motion: reduce){
+      .intro{display:none !important;}
     }
-
-    /* Dots nur Mobile */
-    .dots{ position:fixed; bottom:40px; left:50%; transform:translateX(-50%); display:none; gap:8px; z-index:35; }
-    .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.3); transition:.25s; }
-    .dot.active{ background:#fff; transform:scale(1.3); }
-    @media (max-width:900px){ .dots{ display:flex } }
   </style>
 </head>
-<body>
-  <!-- Logo -->
-  <header>
-    <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
-  </header>
 
-  <!-- Hamburger -->
+<body>
+  <!-- INTRO OVERLAY -->
+  <div id="intro" class="intro" aria-hidden="true">
+    <img class="intro-logo" src="/img/logo_inverted.png" alt="Juri Prinz Logo">
+  </div>
+
+  <header><img src="/img/logo_inverted.png" alt="Juri Prinz Photography"></header>
   <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
 
-  <!-- GTA-Menü -->
-  <div class="menu-overlay" id="menu">
-    <ul>
-      <li>Portrait</li>
-      <li>Event</li>
-      <li>Landscape</li>
-      <li>Corporate</li>
-      <li>About</li>
-      <li>Behind the Scenes</li>
-    </ul>
-  </div>
-
-  <!-- Hauptobjekt mit 6 Sektionen -->
-  <div class="sections" id="sections">
-    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
-    <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
-    <div class="section"><img src="img/IMG_3274_final.jpg" alt=""><h2>Landscape</h2></div>
-    <div class="section"><img src="img/IMG_4213.JPG" alt=""><h2>Corporate</h2></div>
-    <div class="section"><img src="img/about1.jpg" alt=""><h2>About</h2></div>
-    <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
-  </div>
-
-  <!-- Dots (nur Mobile sichtbar) -->
-  <div class="dots" id="dots">
-    <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-  </div>
-
-  <script>
-    // Hamburger → Menü
-    const burger = document.getElementById('hamburger');
-    const menu = document.getElementById('menu');
-    burger.addEventListener('click', ()=>{
-      burger.classList.toggle('active');
-      menu.classList.toggle('active');
-    });
-
-    // ===== Mobile: GSAP Draggable + Inertia + Snap =====
-    const container = document.getElementById('sections');
-    const slides = Array.from(container.querySelectorAll('.section'));
-    const dots   = Array.from(document.querySelectorAll('.dot'));
-    let activeIndex = 0;
-
-    function setActive(i){
-      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
-      dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
-      activeIndex = i;
-    }
-    function scrollToIndex(i, dur=0.7){
-      i = Math.max(0, Math.min(slides.length-1, i));
-      const sl = slides[i];
-      const target = sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2;
-      gsap.to(container, {scrollLeft: target, duration: dur, ease: "power3.out"});
-      setActive(i);
-    }
-
-    // nur aktivieren, wenn Mobile
-    if (window.matchMedia("(max-width: 900px)").matches){
-      const proxy = document.createElement("div");
-      const getGap = () => parseFloat(getComputedStyle(container).gap || 0);
-      const slideW = () => slides[0].clientWidth + getGap();
-      const maxScroll = () => container.scrollWidth - container.clientWidth;
-
-      Draggable.create(proxy, {
-        type:"x", inertia:true,
-        onDrag:      function(){ container.scrollLeft = -this.x; },
-        onThrowUpdate:function(){ container.scrollLeft = -this.x; },
-        bounds: { minX: -maxScroll(), maxX: 0 },
-        snap: (endX) => {
-          const idx = Math.round((-endX) / slideW());
-          scrollToIndex(idx, .55);
-          const sl = slides[Math.max(0, Math.min(slides.length-1, idx))];
-          return - (sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2);
-        }
-      });
-
-      // Fallback: beim Scrollen aktiven Punkt setzen
-      container.addEventListener('scroll', ()=>{
-        const idx = Math.round(container.scrollLeft / slideW());
-        if (idx !== activeIndex) setActive(idx);
-      });
-
-      setActive(0);
-    }
-  </script>
-</body>
-</html>
+  <!-- Overlay Menü -->
+  <div class="menu-overlay" id="menu" aria-hidden="true">
+    <nav class="menu-nav" aria-label="Hauptmenü">
+      <ul class="menu-list">
+        <li><
