@@ -6,7 +6,7 @@
   <title>Juri Prinz Photography</title>
 
   <!-- Einheitliches Menü & Design -->
-  <link rel="stylesheet" href="/css/menu.css">
+  <link rel="stylesheet" href="css/menu.css">
   
   <style>
     /* ====== Landing Page Design ====== */
@@ -34,7 +34,8 @@
     /* ====== Hauptsektionen ====== */
     .sections{
       position:relative; display:flex; align-items:center; height:100vh; overflow:hidden;
-      padding:18vh 0 7vh; gap:var(--gap);
+  padding:14vh 0 7vh;  /* ~4vh weniger oben */
+  gap:var(--gap);
     }
     .section{
       position:relative; flex:1; height:80vh; border-radius:12px; overflow:hidden; background:#000;
@@ -149,7 +150,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
 
   <!-- Einheitliches Menü -->
-  <script src="/js/menu.js"></script>
+  <script src="js/menu.js"></script>
 
   <!-- Intro-Logo-Logik -->
   <script>
