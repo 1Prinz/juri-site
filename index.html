@@ -5,20 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Juri Prinz Photography</title>
 
-  <!-- GSAP (für Mobile: Inertia + Snap) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
-
+  <!-- Einheitliches Menü & Design -->
+  <link rel="stylesheet" href="/css/menu.css">
+  
   <style>
-    /* ==== Design-Parameter ==== */
+    /* ====== Landing Page Design ====== */
     :root{
-      --cut-desktop: 9%;       /* Schräge der Außenkanten (Desktop) */
-      --cut-mobile: 7%;        /* Schräge (Mobile) */
-      --gap: 6px;              /* dünne schwarze Trennlinie Desktop */
-      --gap-mobile: 4px;       /* dünne Trennlinie Mobile */
-      --menu-glow-outer: 36px; /* Glow im GTA-Menü */
-      --menu-glow-inner: 14px;
+      --cut-desktop: 9%;
+      --cut-mobile: 7%;
+      --gap: 6px;
+      --gap-mobile: 4px;
     }
 
     *{margin:0;padding:0;box-sizing:border-box}
@@ -28,45 +24,14 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     }
 
-    /* ====== Logo ====== */
+    /* Logo oben mittig */
     header{
       position:fixed; top:-30px; left:50%; transform:translateX(-50%);
       z-index:30; pointer-events:none; text-align:center;
     }
     header img{ width:185px; max-width:45vw; height:auto }
 
-    /* ====== Hamburger ====== */
-    .hamburger{
-      position:fixed; top:40px; right:40px; width:30px; height:22px;
-      z-index:40; cursor:pointer;
-    }
-    .hamburger span{
-      display:block; height:3px; width:100%; background:#fff; border-radius:3px; margin:5px 0; transition:.25s;
-    }
-    .hamburger.active span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
-    .hamburger.active span:nth-child(2){ opacity:0; }
-    .hamburger.active span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
-
-    /* ====== Menü (Liquid-Glas mit stärkerem Glow) ====== */
-    .menu-overlay{
-      position:fixed; inset:0; z-index:25; display:flex; align-items:center; justify-content:center;
-      backdrop-filter: blur(22px) saturate(170%); background:rgba(18,18,18,.60);
-      opacity:0; pointer-events:none; transition:opacity .35s ease;
-    }
-    .menu-overlay.active{ opacity:1; pointer-events:auto; }
-    .menu-overlay ul{ list-style:none; text-align:center; }
-    .menu-overlay li{
-      font-size:2rem; font-weight:500; letter-spacing:.5px; margin:18px 0;
-      opacity:0; transform:translateY(14px); transition:.35s;
-    }
-    .menu-overlay.active li{ opacity:1; transform:translateY(0); }
-    .menu-overlay li:hover{
-      text-shadow:0 0 var(--menu-glow-outer) rgba(255,255,255,.65),
-                  0 0 var(--menu-glow-inner) rgba(255,255,255,.30);
-      cursor:pointer;
-    }
-
-    /* ====== Haupt-Objekt (6 Kacheln) ====== */
+    /* ====== Hauptsektionen ====== */
     .sections{
       position:relative; display:flex; align-items:center; height:100vh; overflow:hidden;
       padding:18vh 0 7vh; gap:var(--gap);
@@ -74,7 +39,6 @@
     .section{
       position:relative; flex:1; height:80vh; border-radius:12px; overflow:hidden; background:#000;
       transition:transform .28s ease, filter .28s ease, box-shadow .28s ease; isolation:isolate;
-      /* Schräg geschnittene Außenkanten – dicht an dicht */
       clip-path: polygon(var(--cut-desktop) 0, 100% 0, calc(100% - var(--cut-desktop)) 100%, 0 100%);
     }
     .section img{
@@ -87,13 +51,13 @@
       text-shadow:0 0 10px rgba(0,0,0,.6); pointer-events:none; z-index:2;
     }
 
-    /* GTA-Hover: nicht aktive dimmen + s/w, aktive leicht größer + Glow */
+    /* Hover: GTA-Style */
     .sections:hover .section{ filter:grayscale(100%) brightness(.75); }
     .section:hover{
       filter:none !important; transform:scale(1.03); box-shadow:0 0 30px rgba(255,255,255,.14); z-index:10;
     }
 
-    /* ====== Mobile (Snap-Carousel) ====== */
+    /* ====== Mobile ====== */
     @media (max-width:900px){
       .sections{
         overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
@@ -107,35 +71,63 @@
       .section h2{ bottom:22px; font-size:1.45rem; }
     }
 
-    /* Dots nur Mobile */
     .dots{ position:fixed; bottom:40px; left:50%; transform:translateX(-50%); display:none; gap:8px; z-index:35; }
     .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.3); transition:.25s; }
     .dot.active{ background:#fff; transform:scale(1.3); }
     @media (max-width:900px){ .dots{ display:flex } }
+
+    /* ====== Intro ====== */
+    .intro{
+      position:fixed; inset:0; background:#000; z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .intro.hidden{ display:none; }
+    .intro-logo{
+      opacity:0; width:min(280px,50vw);
+      animation: logoFade 4s ease forwards;
+    }
+    @keyframes logoFade{
+      0%{opacity:0} 25%{opacity:1} 75%{opacity:1} 100%{opacity:0}
+    }
   </style>
 </head>
 <body>
-  <!-- Logo -->
+  <!-- INTRO LOGO -->
+  <div id="intro" class="intro">
+    <img class="intro-logo" src="/img/logo_inverted.png" alt="Juri Prinz Logo">
+  </div>
+
+  <!-- Header / Logo -->
   <header>
     <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
   </header>
 
-  <!-- Hamburger -->
+  <!-- Hamburger Menü -->
   <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
 
-  <!-- GTA-Menü -->
+  <!-- Overlay Menü -->
   <div class="menu-overlay" id="menu">
-    <ul>
-      <li>Portrait</li>
-      <li>Event</li>
-      <li>Landscape</li>
-      <li>Corporate</li>
-      <li>About</li>
-      <li>Behind the Scenes</li>
+    <ul class="menu-list">
+      <li><a href="/" class="menu-link">Home</a></li>
+      <li><a href="#portrait" class="menu-link">Portrait</a></li>
+      <li><a href="#event" class="menu-link">Event</a></li>
+      <li><a href="#landscape" class="menu-link">Landscape</a></li>
+      <li><a href="/corporate/index.html" class="menu-link">Corporate</a></li>
+      <li><a href="#about" class="menu-link">About</a></li>
+      <li><a href="#bts" class="menu-link">Behind the Scenes</a></li>
+    </ul>
+    <ul class="socials">
+      <li><a href="https://www.facebook.com/juri.prinz/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+      <li><a href="https://www.instagram.com/juri_prinz_/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+      <li><a href="https://www.youtube.com/@1Prinz" target="_blank"><i class="fab fa-youtube"></i></a></li>
+      <li><a href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+      <li><a href="https://t.me/prinz_juri" target="_blank"><i class="fab fa-telegram-plane"></i></a></li>
+      <li><a href="https://wa.me/41767788891" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+      <li><a href="mailto:prinz_juri@online.de"><i class="fas fa-envelope"></i></a></li>
     </ul>
   </div>
 
-  <!-- Hauptobjekt mit 6 Sektionen -->
+  <!-- Haupt-Sektionen -->
   <div class="sections" id="sections">
     <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
     <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
@@ -145,68 +137,31 @@
     <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
   </div>
 
-  <!-- Dots (nur Mobile sichtbar) -->
+  <!-- Dots (nur Mobile) -->
   <div class="dots" id="dots">
     <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
     <div class="dot"></div><div class="dot"></div><div class="dot"></div>
   </div>
 
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
+
+  <!-- Einheitliches Menü -->
+  <script src="/js/menu.js"></script>
+
+  <!-- Intro-Logo-Logik -->
   <script>
-    // Hamburger → Menü
-    const burger = document.getElementById('hamburger');
-    const menu = document.getElementById('menu');
-    burger.addEventListener('click', ()=>{
-      burger.classList.toggle('active');
-      menu.classList.toggle('active');
+    window.addEventListener('load',()=>{
+      const intro = document.getElementById('intro');
+      if(!sessionStorage.getItem('introPlayed')){
+        setTimeout(()=>{ intro.classList.add('hidden'); }, 4000);
+        sessionStorage.setItem('introPlayed','true');
+      } else {
+        intro.style.display='none';
+      }
     });
-
-    // ===== Mobile: GSAP Draggable + Inertia + Snap =====
-    const container = document.getElementById('sections');
-    const slides = Array.from(container.querySelectorAll('.section'));
-    const dots   = Array.from(document.querySelectorAll('.dot'));
-    let activeIndex = 0;
-
-    function setActive(i){
-      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
-      dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
-      activeIndex = i;
-    }
-    function scrollToIndex(i, dur=0.7){
-      i = Math.max(0, Math.min(slides.length-1, i));
-      const sl = slides[i];
-      const target = sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2;
-      gsap.to(container, {scrollLeft: target, duration: dur, ease: "power3.out"});
-      setActive(i);
-    }
-
-    // nur aktivieren, wenn Mobile
-    if (window.matchMedia("(max-width: 900px)").matches){
-      const proxy = document.createElement("div");
-      const getGap = () => parseFloat(getComputedStyle(container).gap || 0);
-      const slideW = () => slides[0].clientWidth + getGap();
-      const maxScroll = () => container.scrollWidth - container.clientWidth;
-
-      Draggable.create(proxy, {
-        type:"x", inertia:true,
-        onDrag:      function(){ container.scrollLeft = -this.x; },
-        onThrowUpdate:function(){ container.scrollLeft = -this.x; },
-        bounds: { minX: -maxScroll(), maxX: 0 },
-        snap: (endX) => {
-          const idx = Math.round((-endX) / slideW());
-          scrollToIndex(idx, .55);
-          const sl = slides[Math.max(0, Math.min(slides.length-1, idx))];
-          return - (sl.offsetLeft - (container.clientWidth - sl.clientWidth)/2);
-        }
-      });
-
-      // Fallback: beim Scrollen aktiven Punkt setzen
-      container.addEventListener('scroll', ()=>{
-        const idx = Math.round(container.scrollLeft / slideW());
-        if (idx !== activeIndex) setActive(idx);
-      });
-
-      setActive(0);
-    }
   </script>
 </body>
 </html>
