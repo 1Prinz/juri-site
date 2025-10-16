@@ -5,131 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Juri Prinz Photography</title>
 
-  <!-- Einheitliches Menü & Design -->
+  <!-- Zentrales Stylesheet -->
   <link rel="stylesheet" href="css/menu.css">
-  
+
   <style>
-    /* ====== Landing Page Design ====== */
     :root{
       --cut-desktop: 9%;
-      --cut-mobile: 7%;
       --gap: 6px;
-      --gap-mobile: 4px;
+      --intro-duration: 4s;
     }
 
     *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      background:#000; color:#fff; overflow-x:hidden;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    html,body{height:100%;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden;}
+
+    /* Intro Overlay */
+    .intro{
+      position:fixed;inset:0;background:#000;z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .intro-logo{
+      opacity:0;width:min(280px,50vw);
+      animation: logoFade var(--intro-duration) ease forwards;
+    }
+    @keyframes logoFade{
+      0%{opacity:0}
+      25%{opacity:1}
+      75%{opacity:1}
+      100%{opacity:0}
     }
 
-    /* Logo oben mittig */
+    /* Header + Logo */
     header{
-      position:fixed; top:-30px; left:50%; transform:translateX(-50%);
-      z-index:30; pointer-events:none; text-align:center;
+      position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      z-index:30;text-align:center;pointer-events:none;
     }
-    header img{ width:185px; max-width:45vw; height:auto }
+    header img{width:180px;max-width:45vw;height:auto;}
 
-    /* ====== Hauptsektionen ====== */
+    /* Haupt-Sektionen */
     .sections{
-      position:relative; display:flex; align-items:center; height:100vh; overflow:hidden;
-  padding:14vh 0 7vh;  /* ~4vh weniger oben */
-  gap:var(--gap);
+      position:relative;display:flex;align-items:flex-start;
+      justify-content:center;height:100vh;overflow:hidden;
+      padding:10vh 0 6vh;gap:var(--gap);
     }
     .section{
-      position:relative; flex:1; height:80vh; border-radius:12px; overflow:hidden; background:#000;
-      transition:transform .28s ease, filter .28s ease, box-shadow .28s ease; isolation:isolate;
-      clip-path: polygon(var(--cut-desktop) 0, 100% 0, calc(100% - var(--cut-desktop)) 100%, 0 100%);
+      position:relative;flex:1;height:80vh;border-radius:12px;overflow:hidden;background:#000;
+      transition:transform .28s ease,filter .28s ease,box-shadow .28s ease;
+      clip-path: polygon(var(--cut-desktop) 0,100% 0,calc(100% - var(--cut-desktop)) 100%,0 100%);
     }
     .section img{
-      width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.06);
+      width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);
       transition:transform .28s ease;
     }
     .section h2{
-      position:absolute; left:0; right:0; bottom:26px; text-align:center;
-      font-size:1.6rem; font-weight:600; letter-spacing:.3px;
-      text-shadow:0 0 10px rgba(0,0,0,.6); pointer-events:none; z-index:2;
+      position:absolute;left:0;right:0;bottom:26px;text-align:center;
+      font-size:1.6rem;font-weight:600;text-shadow:0 0 10px rgba(0,0,0,.6);
     }
+    .sections:hover .section{filter:grayscale(100%) brightness(.75);}
+    .section:hover{filter:none;transform:scale(1.03);box-shadow:0 0 30px rgba(255,255,255,.15);z-index:10;}
 
-    /* Hover: GTA-Style */
-    .sections:hover .section{ filter:grayscale(100%) brightness(.75); }
-    .section:hover{
-      filter:none !important; transform:scale(1.03); box-shadow:0 0 30px rgba(255,255,255,.14); z-index:10;
-    }
-
-    /* ====== Mobile ====== */
-    @media (max-width:900px){
+    /* Mobile */
+    @media(max-width:900px){
       .sections{
-        overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-        padding-top:23vh; padding-bottom:10vh; gap:var(--gap-mobile);
+        overflow-x:auto;scroll-snap-type:x mandatory;
+        -webkit-overflow-scrolling:touch;
+        padding-top:20vh;padding-bottom:10vh;gap:4px;
       }
-      .section{
-        flex:0 0 92%; min-width:92%; height:68vh; border-radius:18px; scroll-snap-align:center; transform:scale(.96);
-        clip-path: polygon(var(--cut-mobile) 0, 100% 0, calc(100% - var(--cut-mobile)) 100%, 0 100%);
-      }
-      .section.active{ transform:scale(1); }
-      .section h2{ bottom:22px; font-size:1.45rem; }
-    }
-
-    .dots{ position:fixed; bottom:40px; left:50%; transform:translateX(-50%); display:none; gap:8px; z-index:35; }
-    .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.3); transition:.25s; }
-    .dot.active{ background:#fff; transform:scale(1.3); }
-    @media (max-width:900px){ .dots{ display:flex } }
-
-    /* ====== Intro ====== */
-    .intro{
-      position:fixed; inset:0; background:#000; z-index:9999;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .intro.hidden{ display:none; }
-    .intro-logo{
-      opacity:0; width:min(280px,50vw);
-      animation: logoFade 4s ease forwards;
-    }
-    @keyframes logoFade{
-      0%{opacity:0} 25%{opacity:1} 75%{opacity:1} 100%{opacity:0}
+      .section{flex:0 0 92%;min-width:92%;height:68vh;border-radius:18px;scroll-snap-align:center;}
+      .section h2{bottom:20px;font-size:1.4rem;}
     }
   </style>
 </head>
+
 <body>
-  <!-- INTRO LOGO -->
+  <!-- Intro Overlay -->
   <div id="intro" class="intro">
-    <img class="intro-logo" src="/img/logo_inverted.png" alt="Juri Prinz Logo">
+    <img class="intro-logo" src="img/logo_inverted.png" alt="Juri Prinz Logo">
   </div>
 
-  <!-- Header / Logo -->
-  <header>
-    <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
-  </header>
+  <!-- Header + Logo -->
+  <header><img src="img/logo_inverted.png" alt="Juri Prinz Photography"></header>
 
   <!-- Hamburger Menü -->
   <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
 
-  <!-- Overlay Menü -->
+  <!-- Menü Overlay -->
   <div class="menu-overlay" id="menu">
-    <ul class="menu-list">
-      <li><a href="/" class="menu-link">Home</a></li>
-      <li><a href="#portrait" class="menu-link">Portrait</a></li>
-      <li><a href="#event" class="menu-link">Event</a></li>
-      <li><a href="#landscape" class="menu-link">Landscape</a></li>
-      <li><a href="/corporate/index.html" class="menu-link">Corporate</a></li>
-      <li><a href="#about" class="menu-link">About</a></li>
-      <li><a href="#bts" class="menu-link">Behind the Scenes</a></li>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Portrait</a></li>
+      <li><a href="#">Event</a></li>
+      <li><a href="#">Landscape</a></li>
+      <li><a href="corporate/index.html">Corporate</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Behind the Scenes</a></li>
     </ul>
     <ul class="socials">
       <li><a href="https://www.facebook.com/juri.prinz/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
       <li><a href="https://www.instagram.com/juri_prinz_/" target="_blank"><i class="fab fa-instagram"></i></a></li>
       <li><a href="https://www.youtube.com/@1Prinz" target="_blank"><i class="fab fa-youtube"></i></a></li>
       <li><a href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
-      <li><a href="https://t.me/prinz_juri" target="_blank"><i class="fab fa-telegram-plane"></i></a></li>
+      <li><a href="https://t.me/prinz_juri" target="_blank"><i class="fab fa-telegram"></i></a></li>
       <li><a href="https://wa.me/41767788891" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
       <li><a href="mailto:prinz_juri@online.de"><i class="fas fa-envelope"></i></a></li>
     </ul>
   </div>
 
-  <!-- Haupt-Sektionen -->
-  <div class="sections" id="sections">
+  <!-- Hauptinhalt -->
+  <div class="sections">
     <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
     <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
     <div class="section"><img src="img/IMG_3274_final.jpg" alt=""><h2>Landscape</h2></div>
@@ -138,29 +120,18 @@
     <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
   </div>
 
-  <!-- Dots (nur Mobile) -->
-  <div class="dots" id="dots">
-    <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-  </div>
-
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js"></script>
-
-  <!-- Einheitliches Menü -->
+  <!-- Font Awesome + JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
   <script src="js/menu.js"></script>
 
-  <!-- Intro-Logo-Logik -->
+  <!-- Intro Script -->
   <script>
-    window.addEventListener('load',()=>{
-      const intro = document.getElementById('intro');
-      if(!sessionStorage.getItem('introPlayed')){
-        setTimeout(()=>{ intro.classList.add('hidden'); }, 4000);
-        sessionStorage.setItem('introPlayed','true');
-      } else {
-        intro.style.display='none';
+    document.addEventListener("DOMContentLoaded",()=>{
+      if(!sessionStorage.getItem("introPlayed")){
+        setTimeout(()=>document.getElementById("intro").style.display="none",4000);
+        sessionStorage.setItem("introPlayed","true");
+      }else{
+        document.getElementById("intro").style.display="none";
       }
     });
   </script>
