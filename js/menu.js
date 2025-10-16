@@ -1,15 +1,28 @@
-const burger = document.getElementById('hamburger');
-const menu = document.getElementById('menu');
-function toggleMenu(force){
-  const open = (typeof force === 'boolean') ? force : !menu.classList.contains('active');
-  burger.classList.toggle('active', open);
-  menu.classList.toggle('active', open);
-  menu.setAttribute('aria-hidden', String(!open));
-}
-burger.addEventListener('click', ()=> toggleMenu());
-document.querySelectorAll('.menu-link, .socials a').forEach(a=>{
-  a.addEventListener('click', ()=> toggleMenu(false));
-});
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape' && menu.classList.contains('active')) toggleMenu(false);
+// ==== Hamburger & Menü ==== //
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("hamburger");
+  const menu = document.getElementById("menu");
+  const links = document.querySelectorAll(".menu-link");
+
+  if (!burger || !menu) return;
+
+  // Klick auf Hamburger => Menü öffnen/schließen
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("active");
+    menu.classList.toggle("active");
+
+    // verhindern, dass Body scrollt, wenn Menü offen
+    document.body.style.overflow = menu.classList.contains("active")
+      ? "hidden"
+      : "";
+  });
+
+  // Klick auf Menülink => Menü schließen
+  links.forEach(link => {
+    link.addEventListener("click", () => {
+      burger.classList.remove("active");
+      menu.classList.remove("active");
+      document.body.style.overflow = "";
+    });
+  });
 });
