@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Corporate • Juri Prinz Photography</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --gap: 12px;
+      --menu-glow-outer: 36px;
+      --menu-glow-inner: 14px;
+      --split-desktop: 42vw;
+      --card-scale: 0.75;
+      --auto-speed: 40;
+      --pad-top: 10vh;
+      --pad-bot: 10vh;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{background:#000;color:#fff;overflow:hidden;
+         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+
+    header{
+      position:fixed;top:22px;left:50%;transform:translateX(-50%);
+      z-index:30;pointer-events:none;text-align:center;
+    }
+    header img{width:160px;max-width:40vw;height:auto;opacity:.95}
+
+    .hamburger{
+      position:fixed;top:32px;right:32px;width:30px;height:22px;z-index:40;cursor:pointer;
+    }
+    .hamburger span{
+      display:block;height:3px;width:100%;background:#fff;border-radius:3px;margin:5px 0;transition:.25s;
+    }
+    .hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+
+    /* Menü */
+    .menu-overlay{
+      position:fixed;inset:0;z-index:35;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      backdrop-filter: blur(22px) saturate(170%);background:rgba(18,18,18,.60);
+      opacity:0;pointer-events:none;transition:opacity .35s ease;
+    }
+    .menu-overlay.active{opacity:1;pointer-events:auto;}
+    .menu-nav{display:flex;flex-direction:column;align-items:center;}
+    .menu-list{list-style:none;text-align:center;margin:0;padding:0;}
+    .menu-link{
+      display:inline-block;font-size:2rem;font-weight:500;letter-spacing:.5px;margin:14px 0;
+      opacity:0;transform:translateY(14px);transition:.3s ease;text-decoration:none;color:#fff;
+    }
+    .menu-overlay.active .menu-link{opacity:1;transform:translateY(0);}
+    .menu-link:hover{
+      transform:translateY(0) scale(1.15);
+      text-shadow:0 0 var(--menu-glow-outer) rgba(255,255,255,.65),
+                   0 0 var(--menu-glow-inner) rgba(255,255,255,.30);
+    }
+    .socials{display:flex;gap:16px;margin-top:28px;flex-wrap:wrap;justify-content:center;
+             list-style:none;padding:0;}
+    .socials a{color:#fff;font-size:1.35rem;transition:.2s;}
+    .socials a:hover{transform:scale(1.12);text-shadow:0 0 10px #fff;}
+
+    .page{display:flex;height:100vh;width:100vw;}
+    .left{
+      position:relative;width:var(--split-desktop);height:100%;
+      overflow-y:auto;overflow-x:hidden;
+      border-right:1px solid rgba(255,255,255,.08);
+      padding:var(--pad-top) 24px calc(var(--pad-bot) - var(--gap));
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
+    }
+    .stream{position:relative;}
+    .set{display:flex;flex-direction:column;gap:var(--gap);}
+    .card{width:calc(100% * var(--card-scale));margin:0 auto;}
+    .card img{
+      width:100%;aspect-ratio:3/4;height:auto;object-fit:cover;
+      border-radius:12px;display:block;filter:brightness(.95);
+      transition:transform .28s ease,filter .28s ease;
+    }
+    .card img:hover{transform:scale(1.02);filter:brightness(1);}
+    .right{flex:1;position:relative;overflow:hidden;}
+    .video-wrap{position:absolute;inset:0;overflow:hidden;}
+    .video-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+                      filter:brightness(.62) contrast(1.05) saturate(1.05);}
+    .video-overlay-gradient{
+      position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(120% 120% at 80% 80%,rgba(0,0,0,.25) 0,
+      rgba(0,0,0,.55) 70%,rgba(0,0,0,.75) 100%);
+    }
+    .logo-watermark{
+      position:absolute;right:2.2%;bottom:2.2%;width:86px;opacity:.55;z-index:20;pointer-events:none;
+    }
+
+    @media (max-width:900px){
+      .page{flex-direction:column;}
+      .right{height:53vh;}
+      .left{width:100vw;height:47vh;border-right:none;border-top:1px solid rgba(255,255,255,.08);
+            padding:10vh 16px calc(10vh - var(--gap));}
+      .logo-watermark{width:72px;right:3%;bottom:3%;}
+    }
+  </style>
+</head>
+<body>
+
+  <header><img src="/img/logo_inverted.png" alt="Juri Prinz Photography" /></header>
+
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+
+  <div class="menu-overlay" id="menu" aria-hidden="true">
+    <nav class="menu-nav" aria-label="Hauptmenü">
+      <ul class="menu-list">
+        <li><a href="/" class="menu-link">Home</a></li>
+        <li><a href="/portrait/" class="menu-link">Portrait</a></li>
+        <li><a href="/event/" class="menu-link">Event</a></li>
+        <li><a href="/landscape/" class="menu-link">Landscape</a></li>
+        <li><a href="/corporate/" class="menu-link">Corporate</a></li>
+        <li><a href="/about/" class="menu-link">About</a></li>
+        <li><a href="/bts/" class="menu-link">Behind the Scenes</a></li>
+      </ul>
+
+      <ul class="socials">
+        <li><a href="https://www.instagram.com/juri_prinz_/" target="_blank" rel="noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://www.facebook.com/juri.prinz/" target="_blank" rel="noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a></li>
+        <li><a href="https://www.youtube.com/@1Prinz" target="_blank" rel="noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+        <li><a href="https://t.me/prinz_juri" target="_blank" rel="noreferrer" aria-label="Telegram"><i class="fab fa-telegram"></i></a></li>
+        <li><a href="https://wa.me/41767788891" target="_blank" rel="noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+        <li><a href="mailto:prinz_juri@online.de" aria-label="E-Mail"><i class="fas fa-envelope"></i></a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main class="page">
+    <section class="left" id="gallery">
+      <div class="stream" id="stream">
+        <div class="set" id="setA">
+          <a class="card"><img src="/img/corp_01.jpg" alt="Corporate 1"></a>
+          <a class="card"><img src="/img/corp_02.jpg" alt="Corporate 2"></a>
+          <a class="card"><img src="/img/corp_03.jpg" alt="Corporate 3"></a>
+          <a class="card"><img src="/img/corp_04.jpg" alt="Corporate 4"></a>
+          <a class="card"><img src="/img/corp_05.jpg" alt="Corporate 5"></a>
+          <a class="card"><img src="/img/corp_06.jpg" alt="Corporate 6"></a>
+          <a class="card"><img src="/img/corp_07.jpg" alt="Corporate 7"></a>
+          <a class="card"><img src="/img/corp_08.jpg" alt="Corporate 8"></a>
+          <a class="card"><img src="/img/corp_09.jpg" alt="Corporate 9"></a>
+          <a class="card"><img src="/img/corp_10.jpg" alt="Corporate 10"></a>
+        </div>
+        <div class="set" id="setB"></div>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="video-wrap">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="/video/corporate.mp4" type="video/mp4" />
+        </video>
+        <div class="video-overlay-gradient"></div>
+      </div>
+      <img class="logo-watermark" src="/img/logo_inverted.png" alt="Juri Prinz Logo">
+    </section>
+  </main>
+
+  <script>
+    // Hamburger-Menü
+    const burger = document.getElementById('hamburger');
+    const menu = document.getElementById('menu');
+    function toggleMenu(force){
+      const open = (typeof force === 'boolean') ? force : !menu.classList.contains('active');
+      burger.classList.toggle('active', open);
+      menu.classList.toggle('active', open);
+      menu.setAttribute('aria-hidden', String(!open));
+    }
+    burger.addEventListener('click', ()=> toggleMenu());
+    document.querySelectorAll('.menu-link, .socials a').forEach(a=>{
+      a.addEventListener('click', ()=> toggleMenu(false));
+    });
+    document.addEventListener('keydown', e=>{
+      if(e.key==='Escape' && menu.classList.contains('active')) toggleMenu(false);
+    });
+
+    // Galerie-Scroll
+    const gallery = document.getElementById('gallery');
+    const setA = document.getElementById('setA');
+    const setB = document.getElementById('setB');
+    function imagesReady(scope){
+      const imgs = Array.from(scope.querySelectorAll('img'));
+      if(imgs.length===0) return Promise.resolve();
+      return Promise.all(imgs.map(img=>{
+        if(img.complete) return Promise.resolve();
+        return new Promise(res=>{
+          img.addEventListener('load', ()=>res(), {once:true});
+          img.addEventListener('error', ()=>res(), {once:true});
+        });
+      }));
+    }
+    let running=false;let last=performance.now();const speed=40;let setHeight=0;
+    function ensureHeight(){
+      setB.innerHTML=setA.innerHTML;
+      const need=gallery.clientHeight*2;
+      while(document.getElementById('stream').scrollHeight<need){
+        setB.innerHTML+=setA.innerHTML;
+      }
+      setHeight=setA.offsetHeight;
+    }
+    function loop(now){
+      const dt=(now-last)/1000;last=now;
+      if(running){
+        gallery.scrollTop+=speed*dt;
+        if(gallery.scrollTop>=setHeight){gallery.scrollTop-=setHeight;}
+      }
+      requestAnimationFrame(loop);
+    }
+    (async function init(){
+      await imagesReady(setA);ensureHeight();running=true;last=performance.now();requestAnimationFrame(loop);
+    })();
+    gallery.addEventListener('mouseenter',()=>running=false);
+    gallery.addEventListener('mouseleave',()=>running=true);
+  </script>
+</body>
+</html>
