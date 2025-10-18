@@ -39,6 +39,7 @@
       100%{opacity:0}
     }
 
+
     /* Header + Logo */
     header{
       position:fixed;top:5px;left:50%;transform:translateX(-50%);
@@ -65,8 +66,18 @@
       position:absolute;left:0;right:0;bottom:26px;text-align:center;
       font-size:1.6rem;font-weight:600;text-shadow:0 0 10px rgba(0,0,0,.6);
     }
-    .sections:hover .section{filter:grayscale(100%) brightness(.75);}
-    .section:hover{filter:none;transform:scale(1.03);box-shadow:0 0 30px rgba(255,255,255,.15);z-index:10;}
+/* Wenn irgendeine Kachel aktiv ist, werden alle gedimmt … */
+.sections.is-hovering .section{
+  filter: grayscale(100%) brightness(.75);
+}
+
+/* … außer die aktuell aktive Kachel */
+.sections.is-hovering .section.is-active{
+  filter: none;
+  transform: scale(1.03);
+  box-shadow: 0 0 30px rgba(255,255,255,.15);
+  z-index: 10;
+}
 
     /* Mobile */
     @media(max-width:900px){
@@ -138,5 +149,32 @@
       }
     });
   </script>
+
+  <script>
+  // Nur auf Geräten mit Maus (Touch nicht)
+  if (window.matchMedia('(hover: hover)').matches) {
+    const container = document.querySelector('.sections');
+    const tiles = Array.from(document.querySelectorAll('.section'));
+
+    tiles.forEach(tile => {
+      tile.addEventListener('mouseenter', () => {
+        container.classList.add('is-hovering');
+        tiles.forEach(t => t.classList.remove('is-active'));
+        tile.classList.add('is-active');
+      });
+
+      tile.addEventListener('mouseleave', () => {
+        tile.classList.remove('is-active');
+        // Wenn die Maus KEINE andere Kachel berührt, Dimmung wieder aus
+        requestAnimationFrame(() => {
+          if (!container.querySelector('.section:hover')) {
+            container.classList.remove('is-hovering');
+          }
+        });
+      });
+    });
+  }
+</script>
+  
 </body>
 </html>
