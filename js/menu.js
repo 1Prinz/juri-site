@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     burger.addEventListener("click", () => toggle());
 
+    // Menü bei Link-Klick schließen
     document.querySelectorAll(".menu-link").forEach(a => {
       a.addEventListener("click", () => toggle(false));
     });
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     container.addEventListener("scroll", markCenter, { passive:true });
     window.addEventListener("resize", () => requestAnimationFrame(markCenter));
 
-    // optional: Dot-Klick → smooth scroll zur Karte
+    // Dot-Klick → smooth scroll
     dots.forEach((d, i) => {
       d.addEventListener("click", () => {
         const target = slides[i].offsetLeft - (container.clientWidth - slides[i].clientWidth)/2;
