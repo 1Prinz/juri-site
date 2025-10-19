@@ -207,3 +207,28 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
     filter:none;box-shadow:none;transform:none;
   }
 }
+
+/* === Sichtbarkeits-Fix für Social Icons === */
+.menu-overlay .socials {
+  position: relative;
+  z-index: 100; /* über Blur-Overlay */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.menu-overlay .socials a,
+.menu-overlay .socials i {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  mix-blend-mode: normal !important;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
+}
+
+.menu-overlay .socials a:hover i {
+  transform: scale(1.25);
+  text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 6px rgba(255,255,255,0.5);
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
+}
