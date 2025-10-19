@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Juri Prinz Photography</title>
+
+  <link rel="stylesheet" href="css/menu.css?v=7" />
+  <link rel="preload" href="img/logo_inverted.png" as="image" />
+</head>
+<body>
+  <!-- Intro -->
+  <div id="intro" class="intro" aria-hidden="true">
+    <img class="intro-logo" src="img/logo_inverted.png" alt="Juri Prinz Logo">
+  </div>
+
+  <!-- Header + Logo -->
+  <header id="site-header">
+    <img src="img/logo_inverted.png" alt="Juri Prinz Photography" />
+  </header>
+
+  <!-- Hamburger -->
+  <button class="hamburger" id="hamburger" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Overlay Menü -->
+  <div class="menu-overlay" id="menu" aria-hidden="true">
+    <nav class="menu-nav" aria-label="Hauptmenü">
+      <ul class="menu-list">
+        <li><a class="menu-link" href="/index.html">Home</a></li>
+        <li><a class="menu-link" href="#">Portrait</a></li>
+        <li><a class="menu-link" href="#">Event</a></li>
+        <li><a class="menu-link" href="#">Landscape</a></li>
+        <li><a class="menu-link" href="/corporate/index.html">Corporate</a></li>
+        <li><a class="menu-link" href="#">About</a></li>
+        <li><a class="menu-link" href="#">Behind the Scenes</a></li>
+      </ul>
+
+      <ul class="socials">
+        <li><a href="https://www.instagram.com/juri_prinz_/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://www.facebook.com/juri.prinz/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+        <li><a href="https://www.youtube.com/@1Prinz" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
+        <li><a href="https://t.me/prinz_juri" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a></li>
+        <li><a href="https://wa.me/41767788891" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+        <li><a href="mailto:prinz_juri@online.de" aria-label="E-Mail"><i class="fas fa-envelope"></i></a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Hauptsektionen -->
+  <div class="sections" id="sections">
+    <div class="section"><img src="img/DSC00361-Bearbeitet-Bearbeitet.jpg" alt=""><h2>Portrait</h2></div>
+    <div class="section"><img src="img/20190109_160131.jpg" alt=""><h2>Event</h2></div>
+    <div class="section"><img src="img/IMG_3274_final.jpg" alt=""><h2>Landscape</h2></div>
+    <div class="section"><img src="img/IMG_4213.JPG" alt=""><h2>Corporate</h2></div>
+    <div class="section"><img src="img/about1.jpg" alt=""><h2>About</h2></div>
+    <div class="section"><img src="img/rmoF60ubT3I.jpg" alt=""><h2>Behind the Scenes</h2></div>
+  </div>
+
+  <!-- Dots (nur Mobile sichtbar) -->
+  <div class="dots" id="dots"></div>
+
+  <!-- Libs + JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" defer></script>
+  <script src="js/menu.js?v=7" defer></script>
+
+  <!-- Intro Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded",()=>{
+      const intro = document.getElementById("intro");
+      if(!intro) return;
+      if(!sessionStorage.getItem("introPlayed")){
+        setTimeout(()=> intro.style.display="none", 4000);
+        sessionStorage.setItem("introPlayed","true");
+      }else{
+        intro.style.display="none";
+      }
+    });
+  </script>
+</body>
+</html>
