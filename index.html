@@ -15,10 +15,11 @@
 
   <style>
     :root{
-      --cut-desktop: 9%;
-      --gap: 6px;
-      --intro-duration: 4s;
-    }
+  --space-top: 21vh;     /* Abstand unter dem Logo */
+  --space-bottom: 8vh;    /* Luft unten für Titel/Glow */
+  --gap: 6px;
+}
+
 
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{height:100%;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden;}
@@ -48,16 +49,29 @@
     header img{width:180px;max-width:45vw;height:auto;}
 
     /* Haupt-Sektionen */
-    .sections{
-      position:relative;display:flex;align-items:flex-start;
-      justify-content:center;height:100vh;overflow:hidden;
-      padding:21vh 0 25vh;gap:var(--gap);
-    }
-    .section{
-      position:relative;flex:1;height:82vh;border-radius:12px;overflow:hidden;background:#000;
-      transition:transform .28s ease,filter .28s ease,box-shadow .28s ease;
-      clip-path: polygon(var(--cut-desktop) 0,100% 0,calc(100% - var(--cut-desktop)) 100%,0 100%);
-    }
+    /* Container */
+.sections{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  height:100vh;                 /* Viewport hoch */
+  overflow:hidden;
+  padding: var(--space-top) 0 var(--space-bottom);
+  gap: var(--gap);
+}
+
+/* Jede Kachel nimmt genau den verbleibenden Platz */
+.section{
+  position:relative;
+  flex:1;
+  height: calc(100vh - var(--space-top) - var(--space-bottom));
+  border-radius:12px;
+  overflow:hidden;
+  background:#000;
+  transition:transform .28s ease, filter .28s ease, box-shadow .28s ease;
+  clip-path: polygon(var(--cut-desktop) 0, 100% 0, calc(100% - var(--cut-desktop)) 100%, 0 100%);
+}
     .section img{
       width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);
       transition:transform .28s ease;
@@ -81,6 +95,9 @@
 
     /* Mobile */
     @media(max-width:900px){
+  :root{ --space-top: 22vh; --space-bottom: 10vh; }
+}
+    {
       .sections{
         overflow-x:auto;scroll-snap-type:x mandatory;
         -webkit-overflow-scrolling:touch;
