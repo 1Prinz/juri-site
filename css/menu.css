@@ -139,7 +139,7 @@
 }
 
 
-// ===== Dots wie bei Apple (unterhalb der Sektionen) =====
+/* === Dots wie bei Apple - unterhalb der Sektionen === */
 .dots {
   position: fixed;
   bottom: 34px;
