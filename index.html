@@ -14,13 +14,15 @@
   <link rel="stylesheet" href="css/menu.css">
 
   <style>
-    :root{
-  --space-top: 21vh;     /* Abstand unter dem Logo */
-  --space-bottom: 8vh;    /* Luft unten für Titel/Glow */
+   :root{
+  --cut-desktop: 9%;
   --gap: 6px;
+  --intro-duration: 4s;
 
-  --tilt: -14deg;   /* Neigungswinkel (negativ = nach links kippen) */
-  --img-scale: 1.06;
+  --space-top: 21vh;
+  --space-bottom: 8vh;
+
+  --img-zoom: 1.06; /* optional für den leichten Bildzoom */
 }
 
 
@@ -58,7 +60,7 @@
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  height:100vh;                 /* Viewport hoch */
+  height:100vh;
   overflow:hidden;
   padding: var(--space-top) 0 var(--space-bottom);
   gap: var(--gap);
@@ -73,25 +75,22 @@
   overflow:hidden;
   background:#000;
   transition: transform .28s ease, filter .28s ease, box-shadow .28s ease;
-  clip-path: polygon(var(--cut-desktop) 0, 100% 0, calc(100% - var(--cut-desktop)) 100%, 0 100%);
-  transform: skewY(var(--tilt));
-  transform-origin: center;
-  will-change: transform;
+  clip-path: polygon(var(--cut-desktop) 0, 100% 0,
+                     calc(100% - var(--cut-desktop)) 100%, 0 100%);
 }
 
 /* Inhalte wieder „gerade ziehen“ */
 .section img{
   width:100%; height:100%; object-fit:cover; display:block;
-  transform: skewY(calc(var(--tilt) * -1)) scale(var(--img-scale));
+  transform: scale(1.06); /* dezenter Zoom, kein skew */
   transition: transform .28s ease;
 }
-
 .section h2{
   position:absolute; left:0; right:0; bottom:26px; text-align:center;
   font-size:1.6rem; font-weight:600; text-shadow:0 0 10px rgba(0,0,0,.6);
-  transform: skewY(calc(var(--tilt) * -1));   /* Text wieder ausrichten */
   pointer-events:none; z-index:2;
 }
+
     
 /* Wenn irgendeine Kachel aktiv ist, werden alle gedimmt … */
 .sections.is-hovering .section{
@@ -101,13 +100,14 @@
 /* … außer die aktuell aktive Kachel */
 .sections.is-hovering .section.is-active{
   filter:none;
-  transform: skewY(var(--tilt)) scale(1.03);   /* Kippung + Zoom */
-  box-shadow:0 0 30px rgba(255,255,255,.15);
+  transform: scale(1.03);               /* nur skalieren, kein skew */
+  box-shadow: 0 0 30px rgba(255,255,255,.15);
   z-index:10;
 }
 
     /* Mobile */
     @media(max-width:900px){
+  :root{ --cut-desktop: 7%; }{
       .sections{
         overflow-x:auto;scroll-snap-type:x mandatory;
         -webkit-overflow-scrolling:touch;
