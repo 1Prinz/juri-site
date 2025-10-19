@@ -16,6 +16,7 @@
   <style>
    :root{
   --cut-desktop: 9%;
+  --cut-mobile: 7%;
   --gap: 6px;
   --intro-duration: 4s;
 
@@ -105,17 +106,60 @@
   z-index:10;
 }
 
-    /* Mobile */
-    @media(max-width:900px){
-  :root{ --cut-desktop: 7%; }{
-      .sections{
-        overflow-x:auto;scroll-snap-type:x mandatory;
-        -webkit-overflow-scrolling:touch;
-        padding-top:20vh;padding-bottom:10vh;gap:4px;
-      }
-      .section{flex:0 0 92%;min-width:92%;height:68vh;border-radius:18px;scroll-snap-align:center;}
-      .section h2{bottom:20px;font-size:1.4rem;}
-    }
+/* ===== MOBILE LAYOUT (<= 900px) ===== */
+@media (max-width: 900px){
+
+  /* mehr Luft unter dem Logo + unten für Titel */
+  :root{
+    --space-top: 24vh;
+    --space-bottom: 12vh;
+  }
+
+  .sections{
+    /* horizontales Scrolling mit Snap */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+
+    /* Kacheln sollen auf voller Höhe stehen, aber als Slider erscheinen */
+    align-items: stretch;
+    gap: 8px;
+    padding: calc(var(--space-top) + env(safe-area-inset-top, 0px)) 0 var(--space-bottom);
+  }
+
+  .section{
+    /* feste Kartenbreite, damit Nachbarn sichtbar bleiben */
+    flex: 0 0 78vw;       /* sichtbare Karte ~78% der Breite */
+    min-width: 78vw;
+    height: calc(100vh - var(--space-top) - var(--space-bottom));
+    scroll-snap-align: center;
+    border-radius: 18px;
+
+    /* auf Mobile etwas dezentere Schräge */
+    clip-path: polygon(var(--cut-mobile) 0, 100% 0,
+                       calc(100% - var(--cut-mobile)) 100%, 0 100%);
+
+    /* kein „Hover-Scale“ auf Touch (sonst ruckelt es) */
+    transform: none;
+  }
+
+  .section img{
+    transform: scale(1.02);   /* dezenter Zoom reicht auf Mobile */
+  }
+
+  .section h2{
+    bottom: 20px;
+    font-size: 1.35rem;
+  }
+
+  /* Falls du die Dimmen-Logik aktiv hast: auf Touch aus */
+  .sections.is-hovering .section{ filter: none; }
+  .sections.is-hovering .section.is-active{
+    filter: none;
+    box-shadow: none;
+  }
+}
   </style>
 </head>
 
