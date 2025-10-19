@@ -3,8 +3,8 @@
   --cut-mobile: 7%;
   --gap: 6px;
 
-  --space-top: 21vh;      /* Platz unterm Logo (Desktop) */
-  --space-bottom: 8vh;    /* Luft unten für Titel */
+  --space-top: 21vh;
+  --space-bottom: 8vh;
 
   --img-zoom: 1.06;
 
@@ -23,7 +23,7 @@ html,body{height:100%}
 body{
   background:#000;color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  overflow-x:hidden;   /* Quer-Scroll nur im .sections-Container */
+  overflow-x:hidden;
   overflow-y:auto;
 }
 
@@ -35,7 +35,7 @@ body{
 /* Header + Logo */
 header{
   position:fixed;
-  top: calc(16px + env(safe-area-inset-top, 0px));  /* Safe-Area */
+  top: calc(16px + env(safe-area-inset-top, 0px));
   left:50%; transform:translateX(-50%);
   z-index:30; text-align:center; pointer-events:none;
 }
@@ -60,7 +60,11 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
 }
 .menu-overlay.active{ opacity:1; pointer-events:auto; }
 
-.menu-nav{ display:flex; flex-direction:column; align-items:center; gap:18px; }
+/* Inhalt im Overlay */
+.menu-nav{
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+  max-height:80vh; overflow:auto; padding:12px 16px;  /* falls Liste + Socials höher als Viewport */
+}
 
 /* Menü-Links */
 .menu-list{
@@ -75,7 +79,8 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
   opacity:0; transform:translateY(14px); transition:.3s ease;
 }
 .menu-overlay.active .menu-link{ opacity:1; transform:translateY(0); }
-/* Hover-Scale + Glow – mit höherer Spezifität & !important gegen Überschreiben */
+
+/* Hover-Scale + Glow */
 @media (hover:hover){
   .menu-overlay.active .menu-link:hover{
     transform: translateY(0) scale(var(--menu-link-hover-scale)) !important;
@@ -84,27 +89,51 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
   }
 }
 
-/* Social Icons */
+/* -------------------------
+   Social icons – sichtbar + animiert
+   ------------------------- */
 .socials{
-  display:flex; gap:16px; margin-top:6px; flex-wrap:wrap; justify-content:center; list-style:none;
+  list-style:none;
+  display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+  margin-top: 20px;
+
+  /* animiertes Einblenden wie die Menülinks */
+  opacity:0; transform:translateY(8px);
+  transition: opacity .35s ease, transform .35s ease;
 }
-.socials a,.socials a:visited{
-  color:#fff; text-decoration:none; transition:transform .2s ease, text-shadow .2s ease;
-  font-size:1.25rem;
+.menu-overlay.active .socials{ opacity:1; transform:translateY(0); }
+
+/* Icon-Grundstil */
+.socials a,
+.socials a:visited,
+.socials a:active,
+.socials a:focus{
+  color:#fff; text-decoration:none;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:50%;
+  font-size:1.25rem; line-height:1;
+  transition: transform .18s ease, text-shadow .18s ease, color .18s ease;
 }
+
+/* Hover: 25% größer + Glow */
 @media (hover:hover){
   .socials a:hover{
     transform: scale(var(--social-hover-scale));
-    text-shadow: 0 0 18px rgba(255,255,255,.9), 0 0 8px rgba(255,255,255,.6);
+    text-shadow: 0 0 18px rgba(255,255,255,.85), 0 0 8px rgba(255,255,255,.45);
+    color:#fff;
   }
 }
+
+/* Falls irgendwelche generischen Regeln Icons „unsichtbar“ machen: */
+.socials a,
+.socials i{ opacity:1 !important; visibility:visible !important; }
 
 /* Hauptsektionen (Desktop) */
 .sections{
   position:relative; display:flex; align-items:flex-start; justify-content:center;
   height:100vh; overflow:hidden; gap:var(--gap);
   padding: var(--space-top) 0 var(--space-bottom);
-  touch-action: pan-x; /* Hint für Touch-Geräte */
+  touch-action: pan-x;
 }
 .section{
   position:relative; flex:1;
@@ -149,16 +178,14 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
     clip-path: polygon(var(--cut-mobile) 0, 100% 0, calc(100% - var(--cut-mobile)) 100%, 0 100%);
     transform:none;
 
-    /* Standard: Nachbarn gedimmt, Mitte farbig via JS */
+    /* Nachbarn gedimmt – Mitte farbig via JS */
     filter: grayscale(100%) brightness(.65);
   }
-  .section.is-center{
-    filter: none;
-  }
+  .section.is-center{ filter:none; }
   .section img{transform:scale(1.02)}
   .section h2{bottom:20px;font-size:1.35rem}
 
-  /* Edge-Vignette */
+  /* Vignette an den Rändern */
   .sections::after{
     content:"";
     position:fixed; left:0; right:0;
