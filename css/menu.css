@@ -232,3 +232,40 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
   text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 6px rgba(255,255,255,0.5);
   filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
 }
+
+/* === Social Icons im Menü sicher sichtbar machen === */
+.menu-overlay .socials{
+  position: relative;
+  z-index: 100;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  filter: none !important;
+  margin-top: 14px;              /* etwas Luft zum Menü */
+}
+
+.menu-overlay .socials a{
+  color:#fff !important;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;     /* gleich große Klickflächen */
+  transition: transform .2s ease, text-shadow .2s ease, filter .2s ease;
+}
+
+.menu-overlay .socials i{
+  font-size: 1.4rem;             /* gut sichtbar */
+  line-height: 1;
+  color:#fff !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+@media (hover:hover){
+  .menu-overlay .socials a:hover{
+    transform: scale(1.25);
+    text-shadow: 0 0 12px rgba(255,255,255,.9), 0 0 6px rgba(255,255,255,.5);
+    filter: drop-shadow(0 0 10px rgba(255,255,255,.6));
+  }
+}
