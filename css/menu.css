@@ -4,7 +4,7 @@
   --gap: 6px;
 
   --space-top: 21vh;      /* Platz unterm Logo (Desktop) */
-  --space-bottom: 8vh;    /* Luft unten für Titel/Glow */
+  --space-bottom: 8vh;    /* Luft unten für Titel */
 
   --img-zoom: 1.06;
 
@@ -23,7 +23,7 @@ html,body{height:100%}
 body{
   background:#000;color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  overflow-x:hidden;  /* Quer-Scroll nur im .sections-Container */
+  overflow-x:hidden;   /* Quer-Scroll nur im .sections-Container */
   overflow-y:auto;
 }
 
@@ -62,6 +62,7 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
 
 .menu-nav{ display:flex; flex-direction:column; align-items:center; gap:18px; }
 
+/* Menü-Links */
 .menu-list{
   list-style:none; text-align:center;
   display:flex; flex-direction:column; align-items:center;
@@ -74,19 +75,23 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
   opacity:0; transform:translateY(14px); transition:.3s ease;
 }
 .menu-overlay.active .menu-link{ opacity:1; transform:translateY(0); }
+/* Hover-Scale + Glow – mit höherer Spezifität & !important gegen Überschreiben */
 @media (hover:hover){
-  .menu-link:hover{
-    transform: translateY(0) scale(var(--menu-link-hover-scale));
+  .menu-overlay.active .menu-link:hover{
+    transform: translateY(0) scale(var(--menu-link-hover-scale)) !important;
     text-shadow: 0 0 var(--menu-glow-outer) rgba(255,255,255,.65),
                  0 0 var(--menu-glow-inner) rgba(255,255,255,.30);
   }
 }
 
-/* Social Icons (immer sichtbar, zentriert) */
+/* Social Icons */
 .socials{
   display:flex; gap:16px; margin-top:6px; flex-wrap:wrap; justify-content:center; list-style:none;
 }
-.socials a,.socials a:visited{ color:#fff; text-decoration:none; transition:transform .2s ease, text-shadow .2s ease; font-size:1.25rem; }
+.socials a,.socials a:visited{
+  color:#fff; text-decoration:none; transition:transform .2s ease, text-shadow .2s ease;
+  font-size:1.25rem;
+}
 @media (hover:hover){
   .socials a:hover{
     transform: scale(var(--social-hover-scale));
@@ -143,6 +148,7 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
     scroll-snap-align:center; border-radius:18px;
     clip-path: polygon(var(--cut-mobile) 0, 100% 0, calc(100% - var(--cut-mobile)) 100%, 0 100%);
     transform:none;
+
     /* Standard: Nachbarn gedimmt, Mitte farbig via JS */
     filter: grayscale(100%) brightness(.65);
   }
