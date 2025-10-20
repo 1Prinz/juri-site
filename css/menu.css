@@ -1,90 +1,90 @@
-/* ===========================
-   Variablen
-   =========================== */
+/* ================================
+   Juri Prinz – Global Stylesheet
+   Saubere, konsolidierte Version
+   ================================ */
+
+/* ---------- Variablen ---------- */
 :root{
-  /* Layout */
+  /* Layout / Slides */
   --cut-desktop: 9%;
   --cut-mobile: 7%;
   --gap: 6px;
 
-  --space-top: 21vh;     /* Luft unterm Logo (Desktop) */
+  /* Abstand oben/unten relativ zum Viewport (unter Logo / für Titel) */
+  --space-top: 21vh;
   --space-bottom: 8vh;
 
+  /* Bild-Zoom in den Kacheln */
   --img-zoom: 1.06;
 
-  /* Menü-Feintuning */
+  /* Menü */
   --menu-item-gap: 10px;          /* Abstand zwischen Menü-Punkten */
-  --menu-link-hover-scale: 1.15;  /* +15% beim Hover */
-  --social-hover-scale: 1.25;     /* +25% beim Hover */
+  --menu-link-hover-scale: 1.15;  /* Skalierung beim Hover (Desktop) */
 
-  --menu-glow-outer: 36px;
-  --menu-glow-inner: 14px;
+  /* Social Buttons */
+  --social-size: 36px;            /* runde Button-Größe */
 }
 
-/* ===========================
-   Reset & Base
-   =========================== */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+/* ---------- Reset / Base ---------- */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
 body{
   background:#000; color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  overflow-x:hidden;   /* horizontal nur im .sections Container */
+  overflow-x:hidden;   /* Quer-Scroll nur im .sections-Container */
   overflow-y:auto;
 }
 
-/* ===========================
-   Intro (Logo-Fade)
-   =========================== */
-.intro{position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center}
-.intro-logo{opacity:0;width:min(280px,50vw);animation:logoFade 4s ease forwards}
-@keyframes logoFade{0%{opacity:0}25%{opacity:1}75%{opacity:1}100%{opacity:0}}
+/* ---------- Intro Overlay ---------- */
+.intro{
+  position:fixed; inset:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center;
+  background:#000;
+}
+.intro-logo{
+  opacity:0; width:min(280px,50vw);
+  animation: logoFade 4s ease forwards;
+}
+@keyframes logoFade{
+  0%{opacity:0} 25%{opacity:1} 75%{opacity:1} 100%{opacity:0}
+}
 
-/* ===========================
-   Header + Logo
-   =========================== */
+/* ---------- Header / Logo ---------- */
 header{
   position:fixed;
-  top: calc(16px + env(safe-area-inset-top, 0px)); /* Safe-Area auf iOS */
-  left:50%;
-  transform:translateX(-50%);
-  z-index:30;
-  text-align:center;
-  pointer-events:none;
+  top: calc(16px + env(safe-area-inset-top, 0px)); /* iOS Notch */
+  left:50%; transform:translateX(-50%);
+  z-index:30; text-align:center; pointer-events:none;
 }
-header img{width:180px;max-width:45vw;height:auto;opacity:.95}
+header img{ width:180px; max-width:45vw; height:auto; opacity:.95; }
 
-/* ===========================
-   Hamburger
-   =========================== */
+/* ---------- Hamburger ---------- */
 .hamburger{
-  position:fixed;
-  top:28px; right:24px;
-  width:30px; height:22px;
-  z-index:60;
-  cursor:pointer;
+  position:fixed; top:28px; right:24px;
+  width:30px; height:22px; z-index:60; cursor:pointer;
   background:none; border:0;
 }
 .hamburger span{
-  display:block; height:3px; width:100%; background:#fff; border-radius:3px; margin:5px 0; transition:.25s;
+  display:block; height:3px; width:100%; background:#fff; border-radius:3px;
+  margin:5px 0; transition:.25s;
 }
-.hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
-.hamburger.active span:nth-child(2){opacity:0}
-.hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.hamburger.active span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
+.hamburger.active span:nth-child(2){ opacity:0; }
+.hamburger.active span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
 
-/* ===========================
-   Menü-Overlay
-   =========================== */
+/* ---------- Menü-Overlay ---------- */
 .menu-overlay{
   position:fixed; inset:0; z-index:50;
   display:flex; align-items:center; justify-content:center;
   backdrop-filter: blur(22px) saturate(170%);
-  background: rgba(18,18,18,.6);
+  background: rgba(18,18,18,.60);
   opacity:0; pointer-events:none; transition:opacity .35s ease;
 }
-.menu-overlay.active{opacity:1; pointer-events:auto;}
+.menu-overlay.active{ opacity:1; pointer-events:auto; }
 
-.menu-nav{display:flex; flex-direction:column; align-items:center; gap:18px}
+.menu-nav{
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+}
 
 /* Menü-Links */
 .menu-list{
@@ -92,80 +92,47 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
   display:flex; flex-direction:column; align-items:center;
   gap: var(--menu-item-gap);
 }
-.menu-link,
-.menu-link:visited,
-.menu-link:active,
-.menu-link:focus{
+.menu-link, .menu-link:visited, .menu-link:active, .menu-link:focus{
   color:#fff; text-decoration:none;
 }
 .menu-link{
-  display:inline-block;
-  font-size:1.95rem; font-weight:500;
-  opacity:0; transform:translateY(14px);
-  transition:.3s ease;
+  display:inline-block; font-size:1.95rem; font-weight:500;
+  opacity:0; transform:translateY(14px); transition:.3s ease;
 }
-.menu-overlay.active .menu-link{opacity:1; transform:translateY(0)}
+.menu-overlay.active .menu-link{ opacity:1; transform:translateY(0); }
 @media (hover:hover){
   .menu-overlay.active .menu-link:hover{
-    transform: translateY(0) scale(var(--menu-link-hover-scale)) !important;
-    text-shadow: 0 0 var(--menu-glow-outer) rgba(255,255,255,.65),
-                 0 0 var(--menu-glow-inner) rgba(255,255,255,.30);
+    transform: translateY(0) scale(var(--menu-link-hover-scale));
+    text-shadow: 0 0 36px rgba(255,255,255,.65),
+                 0 0 14px rgba(255,255,255,.30);
   }
 }
 
-/* ---- Social Icons: sauberer Glow, keine Filter-Animation ---- */
+/* Socials – runde Buttons mit sauberem Glow */
 .socials{
-  position:relative; z-index:100;
-  display:flex; gap:18px; margin-top:14px;
-  list-style:none; justify-content:center;
+  display:flex; gap:14px; margin-top:18px; flex-wrap:wrap;
+  justify-content:center; list-style:none; position:relative; z-index:100;
 }
-
 .socials a{
-  position:relative;
-  width:40px; height:40px; /* etwas größer */
+  width:var(--social-size); height:var(--social-size);
+  border-radius:999px; background:#fff; color:#111;
   display:inline-flex; align-items:center; justify-content:center;
-  text-decoration:none;
-  transform:translateZ(0); /* eigenes Render-Layer */
+  text-decoration:none; transition: transform .18s ease, box-shadow .28s ease;
+  box-shadow: 0 0 0 rgba(255,255,255,0);
 }
-
-/* Icon selbst: vektor-scharf */
-.socials svg{
-  width:24px; height:24px;
-  fill:none; stroke:#fff; stroke-width:2;
-  stroke-linecap:round; stroke-linejoin:round;
-  transition:transform .18s ease;
-  opacity:.95;
-}
-
-/* Basis-Glow (leicht sichtbar) */
-.socials a::after{
-  content:"";
-  position:absolute; inset:-6px;
-  border-radius:50%;
-  box-shadow:0 0 18px rgba(255,255,255,.28);
-  opacity:.55;
-  transition:opacity .22s ease, transform .22s ease;
-  pointer-events:none;
-}
-
-/* Hover: größer + stärkerer Glow – nur auf echten Hover-Geräten */
+.socials a i{ font-size:18px; line-height:1; }
 @media (hover:hover){
-  .socials a:hover svg{ transform:scale(1.12); }
-  .socials a:hover::after{
-    opacity:.95;
-    transform:scale(1.08);
+  .socials a:hover{
+    transform: scale(1.08);
     box-shadow:
       0 0 22px rgba(255,255,255,.55),
       0 0 10px rgba(255,255,255,.35);
   }
 }
 
-/* ===========================
-   Start-Sektionen – Desktop
-   =========================== */
+/* ---------- Sektionen (Desktop) ---------- */
 .sections{
-  position:relative;
-  display:flex; align-items:flex-start; justify-content:center;
+  position:relative; display:flex; align-items:flex-start; justify-content:center;
   height:100vh; overflow:hidden; gap:var(--gap);
   padding: var(--space-top) 0 var(--space-bottom);
   touch-action: pan-x; /* Hint für Touch-Geräte */
@@ -182,41 +149,36 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
   transform: scale(var(--img-zoom)); transition:transform .28s ease;
 }
 .section h2{
-  position:absolute; left:0; right:0; bottom:26px;
-  text-align:center; font-size:1.6rem; font-weight:600;
-  text-shadow:0 0 10px rgba(0,0,0,.6); pointer-events:none; z-index:2;
+  position:absolute; left:0; right:0; bottom:26px; text-align:center;
+  font-size:1.6rem; font-weight:600; text-shadow:0 0 10px rgba(0,0,0,.6);
+  pointer-events:none; z-index:2;
 }
 
 /* GTA-Hover nur Desktop */
 @media (hover:hover){
-  .sections.is-hovering .section{filter:grayscale(100%) brightness(.75)}
+  .sections.is-hovering .section{ filter:grayscale(100%) brightness(.75); }
   .sections.is-hovering .section.is-active{
     filter:none; transform:scale(1.03);
     box-shadow:0 0 30px rgba(255,255,255,.15); z-index:10;
   }
 }
 
-/* ===========================
-   Dots (unten, nur Mobile)
-   =========================== */
+/* ---------- Dots (nur Mobile sichtbar) ---------- */
 .dots{
   position:fixed; bottom:34px; left:50%; transform:translateX(-50%);
   display:none; gap:8px; z-index:20;
 }
 .dot{
   width:8px; height:8px; border-radius:50%;
-  background:rgba(255,255,255,.3);
-  transition:background .3s, transform .3s;
+  background:rgba(255,255,255,.3); transition:background .3s, transform .3s;
 }
-.dot.active{background:#fff; transform:scale(1.3)}
+.dot.active{ background:#fff; transform:scale(1.3); }
 
-/* ===========================
-   Mobile Layout (<= 900px)
-   =========================== */
+/* ---------- Mobile Layout ---------- */
 @media (max-width:900px){
   :root{ --space-top: 24vh; --space-bottom: 12vh; }
 
-  .dots{display:flex}
+  .dots{ display:flex; }
 
   .sections{
     overflow-x:auto; overflow-y:hidden;
@@ -234,15 +196,15 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
     clip-path: polygon(var(--cut-mobile) 0, 100% 0, calc(100% - var(--cut-mobile)) 100%, 0 100%);
     transform:none;
 
-    /* Standard: Nachbarn gedimmt; Mitte farbig via JS (.is-center) */
+    /* Standard: Nachbarn gedimmt – Mitte farbig via JS-Klasse .is-center */
     filter: grayscale(100%) brightness(.65);
   }
   .section.is-center{ filter:none; }
 
-  .section img{transform:scale(1.02)}
-  .section h2{bottom:20px; font-size:1.35rem}
+  .section img{ transform:scale(1.02); }
+  .section h2{ bottom:20px; font-size:1.35rem; }
 
-  /* Edge-Vignette über dem Slider */
+  /* Vignette an den Rändern – dezent */
   .sections::after{
     content:"";
     position:fixed; left:0; right:0;
@@ -258,7 +220,7 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
         rgba(0,0,0,.55) 100%);
   }
 
-  /* Hover-Effekte auf Touch deaktivieren */
+  /* Hover-Effekte auf Touch deaktivieren (nur Sicherheit) */
   .sections.is-hovering .section,
   .sections.is-hovering .section.is-active{
     filter:none; box-shadow:none; transform:none;
