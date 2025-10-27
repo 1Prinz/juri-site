@@ -1,6 +1,6 @@
 /* ==========================================================
    Juri Prinz | Photography
-   Global Stylesheet (v13)
+   Global Stylesheet (v14 Safari-fix)
    ========================================================== */
 
 /* ------------------------------
@@ -21,7 +21,7 @@
 
   /* Social icons */
   --social-gap: 20px;
-  --social-size: 34px;         /* vorher 28px -> jetzt ~20% größer */
+  --social-size: 34px;         /* Icon-Größe */
   --social-hover-scale: 1.15;
 }
 
@@ -136,8 +136,10 @@ header img {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
   background: rgba(18, 18, 18, 0.6);
   backdrop-filter: blur(22px) saturate(170%);
+
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
@@ -148,7 +150,7 @@ header img {
   pointer-events: auto;
 }
 
-/* Menu content */
+/* Wrapper im Menü */
 .menu-nav {
   display: flex;
   flex-direction: column;
@@ -158,7 +160,7 @@ header img {
 }
 
 /* ------------------------------
-   📂 Menu text links
+   📂 Menü-Textlinks
 ------------------------------ */
 .menu-list {
   list-style: none;
@@ -186,11 +188,13 @@ header img {
   transition: 0.3s ease;
 }
 
+/* animate-in beim Öffnen */
 .menu-overlay.active .menu-link {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Hover Glow / GTA Effekt nur Desktop */
 @media (hover: hover) {
   .menu-overlay.active .menu-link:hover {
     transform: scale(var(--menu-link-hover-scale));
@@ -201,7 +205,8 @@ header img {
 }
 
 /* ------------------------------
-   🌐 Social icon row (pure SVG, transparent bg)
+   🌐 Social icons row
+   (Safari-safe: Wrapper + img)
 ------------------------------ */
 .socials {
   list-style: none;
@@ -219,41 +224,50 @@ header img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
   line-height: 0;
+  text-decoration: none;
 
-  /* smooth hover anim */
-  transition: transform 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
   opacity: 0.9;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-/* Das SVG-Icon selbst */
-.socials a img {
+/* Wrapper um das SVG.
+   Hier machen wir das Icon weiß + Glow.
+   Wichtig: KEINE transition auf filter! Safari mag das nicht.
+*/
+.socials a .icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: var(--social-size);
   height: var(--social-size);
-  display: block;
-  object-fit: contain;
 
-  /* Macht schwarze SVGs weiß mit Glow
-     (Schwarz->Weiß) */
+  /* Weißfärben + leichter Grundglow */
   filter:
     brightness(0) invert(1)
-    drop-shadow(0 0 6px rgba(255,255,255,0.35));
+    drop-shadow(0 0 6px rgba(255,255,255,.35));
 }
 
-/* Hover-Effekt nur bei Maus-Geräten */
+.socials a .icon-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Hover-Glow nur auf Geräten mit Hover */
 @media (hover: hover) {
   .socials a:hover {
     transform: scale(var(--social-hover-scale));
     opacity: 1;
   }
 
-  .socials a:hover img {
+  .socials a:hover .icon-wrap {
+    /* kräftigerer Glow. Kein box-shadow => keine harte Kante */
     filter:
       brightness(0) invert(1)
-      drop-shadow(0 0 10px rgba(255,255,255,0.6))
-      drop-shadow(0 0 20px rgba(255,255,255,0.35));
-    /* kein box-shadow -> kein harter quadratischer Rand */
+      drop-shadow(0 0 10px rgba(255,255,255,.6))
+      drop-shadow(0 0 22px rgba(255,255,255,.35));
   }
 }
 
@@ -311,12 +325,11 @@ header img {
   z-index: 2;
 }
 
-/* Desktop Hover Spotlight */
+/* Desktop Hover "Spotlight" */
 @media (hover: hover) {
   .sections.is-hovering .section {
     filter: grayscale(100%) brightness(0.75);
   }
-
   .sections.is-hovering .section.is-active {
     filter: none;
     transform: scale(1.03);
@@ -326,7 +339,7 @@ header img {
 }
 
 /* ------------------------------
-   ⚪ Carousel dots (mobile)
+   ⚪ Carousel Dots (mobile)
 ------------------------------ */
 .dots {
   position: fixed;
@@ -391,7 +404,7 @@ header img {
       0 100%
     );
 
-    /* Standard: nicht-zentrierte Slides grau */
+    /* Standard: Nachbarn grau */
     filter: grayscale(100%) brightness(0.65);
     transform: none;
   }
@@ -409,7 +422,7 @@ header img {
     font-size: 1.35rem;
   }
 
-  /* Vignette an den Rändern */
+  /* Vignette-Rand */
   .sections::after {
     content: "";
     position: fixed;
@@ -430,7 +443,7 @@ header img {
     );
   }
 
-  /* Hover-Effekt auf Touch aus */
+  /* kein Hover-Verhalten auf Touch */
   .sections.is-hovering .section,
   .sections.is-hovering .section.is-active {
     filter: none;
