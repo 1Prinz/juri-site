@@ -1,6 +1,6 @@
 /* ==========================================================
    Juri Prinz | Photography
-   Global Stylesheet (v12)
+   Global Stylesheet (v13)
    ========================================================== */
 
 /* ------------------------------
@@ -21,7 +21,7 @@
 
   /* Social icons */
   --social-gap: 20px;
-  --social-size: 28px;
+  --social-size: 34px;         /* vorher 28px -> jetzt ~20% größer */
   --social-hover-scale: 1.15;
 }
 
@@ -201,7 +201,7 @@ header img {
 }
 
 /* ------------------------------
-   🌐 Social icon row (pure SVG, no bubbles)
+   🌐 Social icon row (pure SVG, transparent bg)
 ------------------------------ */
 .socials {
   list-style: none;
@@ -214,40 +214,46 @@ header img {
   padding: 0;
 }
 
-/* Clickable area */
+/* Klickfläche */
 .socials a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   line-height: 0;
+
+  /* smooth hover anim */
   transition: transform 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
   opacity: 0.9;
 }
 
-/* SVG itself */
+/* Das SVG-Icon selbst */
 .socials a img {
   width: var(--social-size);
   height: var(--social-size);
   display: block;
   object-fit: contain;
 
-  /* Macht schwarze SVGs weiß. 
-     Falls SVGs schon weiß sind → filter:none setzen */
-  filter: invert(1) brightness(1.2)
-          drop-shadow(0 0 3px rgba(255,255,255,0.25));
+  /* Macht schwarze SVGs weiß mit Glow
+     (Schwarz->Weiß) */
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 6px rgba(255,255,255,0.35));
 }
 
+/* Hover-Effekt nur bei Maus-Geräten */
 @media (hover: hover) {
   .socials a:hover {
     transform: scale(var(--social-hover-scale));
     opacity: 1;
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.85));
   }
 
   .socials a:hover img {
-    filter: invert(1) brightness(1.4)
-            drop-shadow(0 0 8px rgba(255,255,255,0.8));
+    filter:
+      brightness(0) invert(1)
+      drop-shadow(0 0 10px rgba(255,255,255,0.6))
+      drop-shadow(0 0 20px rgba(255,255,255,0.35));
+    /* kein box-shadow -> kein harter quadratischer Rand */
   }
 }
 
@@ -305,10 +311,12 @@ header img {
   z-index: 2;
 }
 
+/* Desktop Hover Spotlight */
 @media (hover: hover) {
   .sections.is-hovering .section {
     filter: grayscale(100%) brightness(0.75);
   }
+
   .sections.is-hovering .section.is-active {
     filter: none;
     transform: scale(1.03);
@@ -382,6 +390,8 @@ header img {
       calc(100% - var(--cut-mobile)) 100%,
       0 100%
     );
+
+    /* Standard: nicht-zentrierte Slides grau */
     filter: grayscale(100%) brightness(0.65);
     transform: none;
   }
@@ -399,6 +409,7 @@ header img {
     font-size: 1.35rem;
   }
 
+  /* Vignette an den Rändern */
   .sections::after {
     content: "";
     position: fixed;
@@ -419,6 +430,7 @@ header img {
     );
   }
 
+  /* Hover-Effekt auf Touch aus */
   .sections.is-hovering .section,
   .sections.is-hovering .section.is-active {
     filter: none;
