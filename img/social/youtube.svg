@@ -1,20 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <!-- YouTube Icon v2 – skaliert auf gleiche Größe wie LinkedIn / Telegram -->
   <path fill="#FFFFFF" fill-rule="evenodd" d="
-    M60 50
-    H452
-    C480 50 512 80 512 110
-    V290
-    C512 320 480 350 452 350
-    H60
-    C32 350 0 320 0 290
-    V110
-    C0 80 32 50 60 50
+    M90 180
+    H550
+    C595 180 640 225 640 270
+    V370
+    C640 415 595 460 550 460
+    H90
+    C45 460 0 415 0 370
+    V270
+    C0 225 45 180 90 180
     Z
 
-    M210 280
-    L210 120
-    L355 200
-    L210 280
+    M260 410
+    V230
+    L460 320
+    L260 410
     Z
   " clip-rule="evenodd"/>
 </svg>
