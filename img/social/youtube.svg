@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- YouTube Icon v3 – 25% schmaler, gleiche Höhe wie LinkedIn/Telegram -->
+  <!-- YouTube Icon v4 – 20% schmaler + zentrierter Play-Button -->
   <path fill="#FFFFFF" fill-rule="evenodd" d="
-    M150 190
-    H490
-    C520 190 550 220 550 250
-    V390
-    C550 420 520 450 490 450
-    H150
-    C120 450 90 420 90 390
-    V250
-    C90 220 120 190 150 190
+    M190 190
+    H450
+    C475 190 500 215 500 240
+    V400
+    C500 425 475 450 450 450
+    H190
+    C165 450 140 425 140 400
+    V240
+    C140 215 165 190 190 190
     Z
 
-    M290 400
+    M285 400
     V240
-    L440 320
-    L290 400
+    L415 320
+    L285 400
     Z
   " clip-rule="evenodd"/>
 </svg>
