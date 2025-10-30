@@ -1,21 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720">
-  <!-- YouTube Icon v9 – 10% schmaler, zentriert, 720x720 -->
-  <path fill="#FFFFFF" fill-rule="evenodd" d="
-    M120 160
-    H600
-    C630 160 660 190 660 220
-    V500
-    C660 530 630 560 600 560
-    H120
-    C90 560 60 530 60 500
-    V220
-    C60 190 90 160 120 160
+  <!-- YouTube Icon – Rund, abgestimmt auf WhatsApp/LinkedIn/Telegram -->
+  <circle cx="360" cy="360" r="330" fill="#FFFFFF"/>
+  <path fill="#000000" fill-rule="evenodd" d="
+    M285 250
+    H435
+    C470 250 490 270 490 305
+    V415
+    C490 450 470 470 435 470
+    H285
+    C250 470 230 450 230 415
+    V305
+    C230 270 250 250 285 250
     Z
 
-    M300 480
-    V240
-    L500 360
-    L300 480
+    M320 430
+    V290
+    L430 360
+    L320 430
     Z
   " clip-rule="evenodd"/>
 </svg>
