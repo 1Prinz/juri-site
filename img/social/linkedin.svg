@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <!-- Außenbox -->
   <path fill="#FFFFFF" d="
     M128 112
     H512
@@ -10,7 +11,10 @@
     V144
     C96 128 112 112 128 112
     Z
+  "/>
 
+  <!-- Cut-out: 'in' + Balken -> wird transparent, also gleiche Form wie Font Awesome -->
+  <path fill="#000000" d="
     M232 480
     H168
     V270
@@ -37,5 +41,5 @@
     C346 280 366 260 398 260
     C466 260 480 304 480 362
     Z
-  "/>
+  " fill-rule="evenodd" clip-rule="evenodd"/>
 </svg>
