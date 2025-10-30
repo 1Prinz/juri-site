@@ -1,21 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720">
-  <!-- Mail-Icon v10 – 720x720, Breite 550px, harmonische Höhe -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <!-- Mail-Icon v11 – korrekt skalierte finale Version -->
   <rect
-    x="85"
-    y="170"
-    width="550"
-    height="390"
-    rx="48"
-    ry="48"
+    x="95"
+    y="190"
+    width="450"
+    height="300"
+    rx="40"
+    ry="40"
     fill="none"
     stroke="#FFFFFF"
-    stroke-width="39"
+    stroke-width="36"
   />
   <path
-    d="M105 190 L360 360 L615 190"
+    d="M115 210 L320 350 L525 210"
     fill="none"
     stroke="#FFFFFF"
-    stroke-width="39"
+    stroke-width="36"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
