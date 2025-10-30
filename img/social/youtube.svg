@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- YouTube Icon | Round | Cut-out | 33% breiteres Play-Symbol -->
+  <!-- YouTube Icon | Round | Full Cut-out | Extra Wide Play Triangle -->
   <path fill="#FFFFFF" fill-rule="evenodd" d="
     M320 0
     C497 0 640 143 640 320
@@ -8,21 +8,21 @@
     C0 143 143 0 320 0
     Z
 
-    M230 210
-    H410
-    C440 210 460 230 460 260
-    V380
-    C460 410 440 430 410 430
-    H230
-    C200 430 180 410 180 380
-    V260
-    C180 230 200 210 230 210
+    M160 200
+    H480
+    C520 200 560 240 560 280
+    V360
+    C560 400 520 440 480 440
+    H160
+    C120 440 80 400 80 360
+    V280
+    C80 240 120 200 160 200
     Z
 
-    M285 400
-    V240
-    L430 320
-    L285 400
+    M270 420
+    V220
+    L470 320
+    L270 420
     Z
   " clip-rule="evenodd"/>
 </svg>
