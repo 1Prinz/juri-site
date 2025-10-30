@@ -1,21 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 896 896">
-  <!-- Mail-Icon v6 — vergrößert auf 896x896 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 920">
+  <!-- Mail-Icon v7 — 920x920, +15% Line Weight -->
   <rect
     x="40"
-    y="220"
-    width="816"
-    height="456"
-    rx="58"
-    ry="58"
+    y="230"
+    width="840"
+    height="460"
+    rx="60"
+    ry="60"
     fill="none"
     stroke="#FFFFFF"
-    stroke-width="42"
+    stroke-width="48"
   />
   <path
-    d="M64 240 L448 464 L832 240"
+    d="M60 250 L460 470 L860 250"
     fill="none"
     stroke="#FFFFFF"
-    stroke-width="42"
+    stroke-width="48"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
