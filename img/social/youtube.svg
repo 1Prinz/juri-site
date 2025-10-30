@@ -1,21 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- YouTube Icon v5 – engerer Frame + perfekt mittig -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 410 400">
   <path fill="#FFFFFF" fill-rule="evenodd" d="
-    M170 200
-    H470
-    C490 200 510 220 510 240
-    V400
-    C510 420 490 440 470 440
-    H170
-    C150 440 130 420 130 400
-    V240
-    C130 220 150 200 170 200
+    M50 50
+    H360
+    C385 50 410 80 410 110
+    V290
+    C410 320 385 350 360 350
+    H50
+    C25 350 0 320 0 290
+    V110
+    C0 80 25 50 50 50
     Z
 
-    M290 395
-    V245
-    L430 320
-    L290 395
+    M165 280
+    L165 120
+    L295 200
+    L165 280
     Z
   " clip-rule="evenodd"/>
 </svg>
