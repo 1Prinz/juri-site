@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- Äußerer Rahmen bündig mit der Box -->
-  <rect x="0" y="0" width="640" height="640"
+  <!-- äußerer Rahmen: leicht näher am Rand, aber nicht abgeschnitten -->
+  <rect x="40" y="40" width="560" height="560"
         rx="120" ry="120"
         fill="none" stroke="#FFFFFF" stroke-width="40"/>
 
-  <!-- Kamera-Linse (proportional angepasst) -->
+  <!-- Kamera-Linse, proportional wie im Original -->
   <circle cx="320" cy="320" r="120"
           fill="none" stroke="#FFFFFF" stroke-width="40"/>
 
-  <!-- Blitzpunkt (oben rechts) -->
-  <circle cx="490" cy="150" r="35" fill="#FFFFFF"/>
+  <!-- Blitzpunkt oben rechts -->
+  <circle cx="470" cy="170" r="35" fill="#FFFFFF"/>
 </svg>
