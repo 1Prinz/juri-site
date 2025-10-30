@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- Gleiche Proportionen, aber größerer Anteil der Breite -->
-  <rect x="40" y="160" width="560" height="320" rx="40" ry="40"
-        fill="none" stroke="#FFFFFF" stroke-width="28"/>
-  <path d="M70 190l250 170L570 190"
-        fill="none" stroke="#FFFFFF" stroke-width="28"
+  <!-- Optisch angeglichene Mail-Version (v3) -->
+  <rect x="20" y="140" width="600" height="360" rx="42" ry="42"
+        fill="none" stroke="#FFFFFF" stroke-width="31"/>
+  <path d="M50 170l270 190L590 170"
+        fill="none" stroke="#FFFFFF" stroke-width="31"
         stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
