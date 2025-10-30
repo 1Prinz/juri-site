@@ -1,31 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- Facebook Icon | Original proportions, harmonized size -->
-  <path fill="#FFFFFF" d="
-    M164 72
-    C122 72 72 122 72 164
-    V476
-    C72 518 122 568 164 568
-    H262
-    V396
-    H208
-    V318
-    H262
-    V282
-    C262 186 310 136 406 136
-    C430 136 456 138 474 142
-    V214
-    H424
-    C376 214 352 238 352 286
-    V318
-    H468
-    L452 396
-    H352
-    V568
-    H476
-    C518 568 568 518 568 476
-    V164
-    C568 122 518 72 476 72
-    H164
-    Z
-  "/>
+  <!-- Facebook Icon | Original F, scaled up ~18% to match LinkedIn visual weight -->
+  <g transform="translate(40,40) scale(1.18)">
+    <path fill="#FFFFFF" d="
+      M164 92
+      C126 92 92 126 92 164
+      L92 476
+      C92 514 126 548 164 548
+      H262
+      V396
+      H208
+      V318
+      H262
+      V284.5
+      C262 196 303 156 386 156
+      C402 156 430 159.2 442 162.4
+      V233
+      C435 232.4 424 232 411 232
+      C368 232 352 249 352 292
+      V318
+      H437
+      L422 396
+      H352
+      V548
+      H476
+      C514 548 548 514 548 476
+      L548 164
+      C548 126 514 92 476 92
+      L164 92
+      Z
+    "/>
+  </g>
 </svg>
