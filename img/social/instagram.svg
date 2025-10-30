@@ -1,26 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-  <!-- äußerer Rahmen jetzt näher am Rand -->
-  <rect
-    x="10" y="10"
-    width="620" height="620"
-    rx="120" ry="120"
-    fill="none"
-    stroke="#FFFFFF"
-    stroke-width="40"
-  />
+  <!-- äußerer Rahmen: leicht näher am Rand, aber nicht abgeschnitten -->
+  <rect x="40" y="40" width="560" height="560"
+        rx="120" ry="120"
+        fill="none" stroke="#FFFFFF" stroke-width="40"/>
 
-  <!-- Linse innen, gleiche Proportion wie vorher -->
-  <circle
-    cx="320" cy="320" r="120"
-    fill="none"
-    stroke="#FFFFFF"
-    stroke-width="40"
-  />
+  <!-- Kamera-Linse, proportional wie im Original -->
+  <circle cx="320" cy="320" r="120"
+          fill="none" stroke="#FFFFFF" stroke-width="40"/>
 
-  <!-- kleiner Punkt oben rechts (Blitz / Kameraindikator) weiter nach außen gezogen -->
-  <circle
-    cx="500" cy="140"
-    r="35"
-    fill="#FFFFFF"
-  />
+  <!-- Blitzpunkt oben rechts -->
+  <circle cx="470" cy="170" r="35" fill="#FFFFFF"/>
 </svg>
