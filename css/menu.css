@@ -1,0 +1,237 @@
+/* ==========================================================
+   Juri Prinz | Photography  —  Global Stylesheet
+   Stand: v13 (clickable sections + is-fill/is-stroke, Safari-Glow)
+   ========================================================== */
+
+/* ------------------------------
+   🔧 Variables
+------------------------------ */
+:root{
+  /* Sections */
+  --cut-desktop: 9%;
+  --cut-mobile: 7%;
+  --gap: 6px;
+  --space-top: 21vh;
+  --space-bottom: 8vh;
+  --img-zoom: 1.06;
+
+  /* Menu */
+  --menu-item-gap: 10px;
+  --menu-link-hover-scale: 1.15;
+
+  /* Social icons */
+  --icon-box: 44px;          /* sichtbare Box je Icon (Desktop) */
+  --icon-gap: 18px;
+  --icon-hover-scale: 1.12;
+
+  /* optische Größenangleichung */
+  --fit-fill: 82%;           /* gefüllte Icons (LinkedIn, Telegram, YouTube, Facebook) */
+  --fit-stroke: 94%;         /* Outline-Icons (Instagram, WhatsApp, Mail) */
+}
+
+/* ------------------------------
+   🌑 Base / Reset
+------------------------------ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  height:100%;
+  background:#000;color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;overflow-y:auto;
+}
+
+/* ------------------------------
+   🎬 Intro
+------------------------------ */
+.intro{
+  position:fixed;inset:0;background:#000;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+}
+.intro-logo{opacity:0;width:min(280px,50vw);animation:introFade 4s ease forwards}
+@keyframes introFade{0%{opacity:0}25%{opacity:1}75%{opacity:1}100%{opacity:0}}
+
+/* ------------------------------
+   📸 Header / Logo
+------------------------------ */
+header{
+  position:fixed;top:calc(16px + env(safe-area-inset-top,0px));
+  left:50%;transform:translateX(-50%);
+  z-index:30;text-align:center;pointer-events:none;
+}
+header img{width:180px;max-width:45vw;height:auto;opacity:.95}
+
+/* ------------------------------
+   🍔 Hamburger
+------------------------------ */
+.hamburger{
+  position:fixed;top:28px;right:24px;width:30px;height:22px;z-index:60;
+  cursor:pointer;background:none;border:0;
+}
+.hamburger span{
+  display:block;height:3px;width:100%;background:#fff;border-radius:3px;
+  margin:5px 0;transition:.25s;
+}
+.hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+/* ------------------------------
+   🧭 Menü-Overlay
+------------------------------ */
+.menu-overlay{
+  position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:rgba(18,18,18,.6);backdrop-filter:blur(22px) saturate(170%);
+  opacity:0;pointer-events:none;transition:opacity .35s ease;
+}
+.menu-overlay.active{opacity:1;pointer-events:auto}
+.menu-nav{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+
+/* Menü-Links */
+.menu-list{
+  list-style:none;display:flex;flex-direction:column;align-items:center;
+  gap:var(--menu-item-gap);
+}
+.menu-link,.menu-link:visited,.menu-link:active,.menu-link:focus{color:#fff;text-decoration:none}
+.menu-link{
+  display:inline-block;font-size:1.95rem;font-weight:500;line-height:1.2;
+  opacity:0;transform:translateY(14px);transition:.3s ease;
+}
+.menu-overlay.active .menu-link{opacity:1;transform:translateY(0)}
+@media (hover:hover){
+  .menu-overlay.active .menu-link:hover{
+    transform:scale(var(--menu-link-hover-scale));
+    text-shadow:0 0 36px rgba(255,255,255,.65),0 0 14px rgba(255,255,255,.30);
+  }
+}
+
+/* ------------------------------
+   🌐 Socials (ohne icon-wrap)
+------------------------------ */
+.socials{
+  list-style:none;display:flex;justify-content:center;align-items:center;
+  gap:var(--icon-gap);margin-top:18px;padding:0;
+}
+.socials li{display:flex}
+.socials a{
+  width:var(--icon-box);height:var(--icon-box);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;transition:transform .18s ease,filter .18s ease;
+  /* Safari Compositing / Flicker-Fix */
+  transform:translateZ(0);backface-visibility:hidden;will-change:transform,filter;
+  -webkit-tap-highlight-color:transparent;
+}
+.socials a img{
+  display:block;height:auto;object-fit:contain;pointer-events:none;
+  /* kein Basis-Glow (nur Hover) */
+  filter:none;-webkit-filter:none;
+  /* Safari: antialiasing sauber */
+  -webkit-font-smoothing:antialiased;image-rendering:auto;
+}
+
+/* optische Gleichheit */
+.socials a.is-fill   img{width:var(--fit-fill)}
+.socials a.is-stroke img{width:var(--fit-stroke)}
+
+/* Hover (für Desktop & Safari) */
+@media (hover:hover){
+  .socials a:hover{transform:scale(var(--icon-hover-scale))}
+  .socials a:hover img{
+    filter:drop-shadow(0 0 10px rgba(255,255,255,.55))
+           drop-shadow(0 0 20px rgba(255,255,255,.35));
+    -webkit-filter:drop-shadow(0 0 10px rgba(255,255,255,.55))
+                   drop-shadow(0 0 20px rgba(255,255,255,.35));
+  }
+}
+
+/* ------------------------------
+   🖼 Sections (Desktop)
+------------------------------ */
+.sections{
+  position:relative;display:flex;align-items:flex-start;justify-content:center;
+  height:100vh;overflow:hidden;gap:var(--gap);
+  padding:var(--space-top) 0 var(--space-bottom);touch-action:pan-x;
+}
+.section{
+  position:relative;flex:1;height:calc(100vh - var(--space-top) - var(--space-bottom));
+  background:#000;border-radius:12px;overflow:hidden;
+  clip-path:polygon(var(--cut-desktop) 0,100% 0,calc(100% - var(--cut-desktop)) 100%,0 100%);
+  transition:transform .28s ease,filter .28s ease,box-shadow .28s ease;
+}
+
+/* 🔗 Vollflächiger Link in der Section */
+.section-link{
+  position:absolute;inset:0;display:block;border-radius:inherit;overflow:hidden;
+  cursor:pointer;outline:0;text-decoration:none;color:inherit;
+}
+.section-link:focus-visible{
+  box-shadow:0 0 0 3px rgba(255,255,255,.85) inset,0 0 0 3px rgba(255,255,255,.85);
+}
+
+/* Bild & Caption jetzt unter dem Link-Namespace */
+.section-link img{
+  width:100%;height:100%;object-fit:cover;
+  transform:scale(var(--img-zoom));transition:transform .28s ease;
+}
+.section-link h2{
+  position:absolute;left:0;right:0;bottom:26px;text-align:center;
+  font-size:1.6rem;font-weight:600;z-index:2;pointer-events:none;
+  text-shadow:0 0 10px rgba(0,0,0,.6);
+}
+
+/* Hover/Spotlight bleibt via .is-hovering/.is-active */
+@media (hover:hover){
+  .sections.is-hovering .section{filter:grayscale(100%) brightness(.75)}
+  .sections.is-hovering .section.is-active{filter:none;transform:scale(1.03);box-shadow:0 0 30px rgba(255,255,255,.15);z-index:10}
+}
+
+/* ------------------------------
+   ⚪ Dots (Mobile)
+------------------------------ */
+.dots{position:fixed;bottom:34px;left:50%;transform:translateX(-50%);display:none;gap:8px;z-index:20}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .3s,transform .3s}
+.dot.active{background:#fff;transform:scale(1.3)}
+
+/* ------------------------------
+   📱 Mobile
+------------------------------ */
+@media (max-width:900px){
+  :root{--space-top:24vh;--space-bottom:12vh}
+  .dots{display:flex}
+
+  .sections{
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;align-items:stretch;gap:8px;
+    padding:calc(var(--space-top) + env(safe-area-inset-top,0px)) 0 var(--space-bottom);
+  }
+  .sections::-webkit-scrollbar{display:none}
+
+  .section{
+    flex:0 0 78vw;min-width:78vw;height:calc(100vh - var(--space-top) - var(--space-bottom));
+    border-radius:18px;scroll-snap-align:center;
+    clip-path:polygon(var(--cut-mobile) 0,100% 0,calc(100% - var(--cut-mobile)) 100%,0 100%);
+    filter:grayscale(100%) brightness(.65);transform:none;
+  }
+  .section.is-center{filter:none}
+  .section-link img{transform:scale(1.02)}
+  .section-link h2{bottom:20px;font-size:1.35rem}
+
+  /* Mobile: Icons etwas kleiner, damit alles reinpasst (z.B. Galaxy A51) */
+  :root{
+    --icon-box: 36px;
+    --icon-gap: 14px;
+    --fit-fill: 84%;
+    --fit-stroke: 96%;
+  }
+}
+
+/* ------------------------------
+   🧪 Extra-Fix für ältere Safari-Versionen
+------------------------------ */
+@supports (-webkit-touch-callout: none) {
+  .socials a{transform:translateZ(0)}
+  .socials a:hover img{
+    -webkit-filter:drop-shadow(0 0 10px rgba(255,255,255,.55))
+                   drop-shadow(0 0 20px rgba(255,255,255,.35));
+  }
+}
