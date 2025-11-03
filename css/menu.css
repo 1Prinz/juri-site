@@ -250,4 +250,44 @@ header img{ width:180px; max-width:45vw; height:auto; opacity:.95; }
   .sections.is-hovering .section.is-active{
     filter:none; box-shadow:none; transform:none;
   }
+   /* ——— Safari Glow Fix for Social Icons ——— */
+.menu-overlay .socials a {
+  position: relative;
+  will-change: transform, filter;
+  transform: translateZ(0);           /* Safari: force GPU compositing */
+  backface-visibility: hidden;
+}
+
+.menu-overlay .socials a img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* kein Basis-Glow – erst beim Hover */
+  filter: none;
+  -webkit-filter: none;
+  transition: transform .18s ease, filter .18s ease, -webkit-filter .18s ease;
+}
+
+@media (hover: hover) {
+  /* Hover auf dem Link -> Glow am IMG (sicher in Safari) */
+  .menu-overlay .socials a:hover img {
+    /* Doppelter Drop-Shadow für weicheren, runden Glow */
+    filter:
+      drop-shadow(0 0 10px rgba(255,255,255,.55))
+      drop-shadow(0 0 20px rgba(255,255,255,.35));
+    -webkit-filter:
+      drop-shadow(0 0 10px rgba(255,255,255,.55))
+      drop-shadow(0 0 20px rgba(255,255,255,.35));
+    transform: scale(var(--social-hover-scale, 1.12));
+  }
+}
+
+/* Optional: minimales Idle-Highlight (wenn du gar keinen Basis-Glow willst, auslassen) */
+/*
+.menu-overlay .socials a img {
+  filter: drop-shadow(0 0 1px rgba(255,255,255,.15));
+  -webkit-filter: drop-shadow(0 0 1px rgba(255,255,255,.15));
+}
+*/
 }
