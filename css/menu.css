@@ -193,4 +193,28 @@ header img{width:180px;max-width:45vw;height:auto;opacity:.95}
     flex:0 0 78vw;min-width:78vw;height:calc(100vh - var(--space-top) - var(--space-bottom));
     border-radius:18px;scroll-snap-align:center;
     clip-path:polygon(var(--cut-mobile) 0,100% 0,calc(100% - var(--cut-mobile)) 100%,0 100%);
-    filter:grayscale(100%) brightness(.65);transform:none
+    filter:grayscale(100%) brightness(.65);transform:none;
+  }
+  .section.is-center{filter:none}
+  .section img{transform:scale(1.02)}
+  .section h2{bottom:20px;font-size:1.35rem}
+
+  /* Mobile: Icons etwas kleiner, damit alles reinpasst (z.B. Galaxy A51) */
+  :root{
+    --icon-box: 36px;
+    --icon-gap: 14px;
+    --fit-fill: 84%;
+    --fit-stroke: 96%;
+  }
+}
+
+/* ------------------------------
+   🧪 Extra-Fix für ältere Safari-Versionen
+------------------------------ */
+@supports (-webkit-touch-callout: none) {
+  .socials a{transform:translateZ(0)}
+  .socials a:hover img{
+    -webkit-filter:drop-shadow(0 0 10px rgba(255,255,255,.55))
+                   drop-shadow(0 0 20px rgba(255,255,255,.35));
+  }
+}
