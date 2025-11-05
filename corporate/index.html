@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Corporate • Juri Prinz Photography</title>
 
-  <!-- Zentrales Stylesheet wie auf der Landing Page -->
+  <title>Corporate • Juri Prinz Photography</title>
+  <link rel="canonical" href="https://juri-prinz.de/corporate/" />
+
+  <!-- Globales Menü/CSS wie Landing -->
   <link rel="stylesheet" href="/css/menu.css?v=16" />
 
-  <!-- Optional: Page-spezifische Meta -->
-  <meta name="description" content="Corporate Fotografie: Mitarbeiter-Portraits, Team, Office & Event – modern, clean, on brand." />
+  <!-- Meta (kurz gehalten) -->
+  <meta name="description" content="Corporate-Fotografie: Business Portraits, Team, On-Location – Bodensee & Schweiz." />
   <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" href="/img/favicon/favicon-32.png" />
 
   <style>
     :root{
       --gap: 12px;
-      --card-scale: 0.75;        /* Breite der Karten auf der linken Spalte */
+      --split-desktop: 42vw;   /* Anteil linke Spalte Desktop */
+      --auto-speed: 40;        /* px/s Autoscroll */
       --pad-top: 10vh;
       --pad-bot: 10vh;
-      --auto-speed: 40;          /* px/s Autoscroll */
-      --split-desktop: 42vw;     /* Breite linke Spalte (Desktop) */
     }
 
-    /* Grundlayout */
+    /* Seite */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
@@ -30,124 +32,124 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     }
 
-    /* === KEIN Header-Logo auf dieser Seite (bewusst weggelassen) === */
+    /* ===== Header + Burger (lassen wir vom globalen CSS stylen) ===== */
+    header{ position:fixed; top:22px; left:50%; transform:translateX(-50%); z-index:30; pointer-events:none; }
+    header img{ width:160px; max-width:40vw; height:auto; opacity:.95 }
+    /* Burger & Overlay kommen aus /css/menu.css – nur Z-Index feinjustieren: */
+    .hamburger{ z-index:100 }         /* sicher über allem klickbar */
+    .menu-overlay{ z-index:90 }       /* über Content, unter Burger */
 
-    /* Burger-Button: identisch zur Landing-Page (Markup & IDs sind gleich) */
-    .hamburger{
-      position:fixed; top:28px; right:24px;
-      width:30px; height:22px; z-index:60; cursor:pointer;
-      background:none; border:none;
-    }
-    .hamburger span{
-      display:block; width:100%; height:3px; margin:5px 0;
-      background:#fff; border-radius:3px; transition:.25s;
-    }
-    .hamburger.active span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
-    .hamburger.active span:nth-child(2){ opacity:0; }
-    .hamburger.active span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
+    /* ===== Layout Split ===== */
+    .page{ display:flex; height:100vh; width:100vw; }
 
-    /* Die Menü-Styles selbst kommen aus /css/menu.css?v=16
-       (menu-overlay, menu-list, .socials, SVG-Sizing etc.) */
-
-    /* Seite: Split-Layout */
-    .page{display:flex;height:100vh;width:100vw;}
-
+    /* Linke Spalte: Auto-Scroll Galerie */
     .left{
-      position:relative;width:var(--split-desktop);height:100%;
-      overflow-y:auto; overflow-x:hidden;
+      position:relative; width:var(--split-desktop); height:100%;
+      overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
       border-right:1px solid rgba(255,255,255,.08);
       padding:var(--pad-top) 24px calc(var(--pad-bot) - var(--gap));
-      overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+      z-index:10;
     }
-    .stream{position:relative;}
-    .set{display:flex;flex-direction:column;gap:var(--gap);}
-    .card{width:calc(100% * var(--card-scale)); margin:0 auto;}
+    .stream{ position:relative; }
+    .set{ display:flex; flex-direction:column; gap:var(--gap); }
+    .card{ width:calc(100% * 0.75); margin:0 auto; }
     .card img{
       width:100%; aspect-ratio:3/4; height:auto; object-fit:cover;
       border-radius:12px; display:block; filter:brightness(.95);
       transition:transform .28s ease, filter .28s ease;
     }
-    .card img:hover{ transform:scale(1.02); filter:brightness(1); }
+    .card img:hover{ transform:scale(1.02); filter:brightness(1) }
 
-    .right{flex:1; position:relative; overflow:hidden;}
+    /* Rechte Spalte: Video mit Vignette */
+    .right{ flex:1; position:relative; overflow:hidden; z-index:5; }
     .video-wrap{ position:absolute; inset:0; overflow:hidden; }
     .video-wrap video{
-      position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; filter:brightness(.62) contrast(1.05) saturate(1.05);
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      filter:brightness(.8) contrast(1.05) saturate(1.05);
+      z-index:1;
+    }
+    /* Posterbild falls du eins zeigen willst (optional, sonst display:none) */
+    .hero-poster{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      filter:brightness(.8) contrast(1.05) saturate(1.05);
+      z-index:1; display:none;     /* auf Wunsch aktivieren */
     }
 
-    /* Weicher Radial-Gradient – Mitte nur ~10% abgedunkelt */
-    .video-overlay-gradient{
-      position:absolute; inset:0; pointer-events:none;
+    /* Weiche Vignette: Mitte heller (~10%), Ränder zunehmend dunkel */
+    .video-vignette{
+      position:absolute; inset:0; pointer-events:none; z-index:2;
       background:
-        radial-gradient(110% 110% at 50% 50%,
-          rgba(0,0,0,0.10) 0%,
-          rgba(0,0,0,0.25) 40%,
-          rgba(0,0,0,0.50) 70%,
-          rgba(0,0,0,0.78) 100%);
+        radial-gradient(
+          circle at 50% 55%,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) 35%,
+          rgba(0,0,0,.18) 58%,
+          rgba(0,0,0,.34) 75%,
+          rgba(0,0,0,.55) 100%
+        );
+      /* Für Safari weichzeichnen, damit’s super smooth ausläuft */
+      -webkit-backdrop-filter: blur(0px);
     }
 
-    /* dezente Logo-Wasserzeichen unten rechts */
+    /* kleines Logo unten rechts im Video (kannst du weglassen) */
     .logo-watermark{
-      position:absolute; right:2.2%; bottom:2.2%;
-      width:86px; opacity:.55; z-index:20; pointer-events:none;
+      position:absolute; right:2.2%; bottom:2.2%; width:86px; opacity:.55; z-index:3; pointer-events:none;
     }
 
-    /* Responsive */
-    @media (max-width: 1100px){
-      :root{ --split-desktop: 48vw; --card-scale: 0.82; }
-    }
-    @media (max-width: 900px){
-      .page{flex-direction:column;}
-      .right{height:53vh;}
+    /* Mobile */
+    @media (max-width:900px){
+      .page{ flex-direction:column; }
+      .right{ height:53vh; }
       .left{
         width:100vw; height:47vh; border-right:none;
         border-top:1px solid rgba(255,255,255,.08);
         padding:10vh 16px calc(10vh - var(--gap));
       }
-      .logo-watermark{width:72px; right:3%; bottom:3%;}
+      .logo-watermark{ width:72px; right:3%; bottom:3% }
     }
   </style>
 </head>
 <body>
 
-  <!-- Burger (gleich wie Landing-Page) -->
+  <!-- Header (zentral wie Landing) -->
+  <header><img src="/img/logo_inverted.png" alt="Juri Prinz Photography" /></header>
+
+  <!-- Burger (gleich wie Landing) -->
   <button class="hamburger" id="hamburger" aria-label="Menü">
     <span></span><span></span><span></span>
   </button>
 
-  <!-- Overlay-Menü (gleiches Markup & Social-SVGs wie Landing-Page) -->
+  <!-- Overlay-Menü (gleich wie Landing) -->
   <div class="menu-overlay" id="menu" aria-hidden="true">
     <nav class="menu-nav" aria-label="Hauptmenü">
       <ul class="menu-list">
-        <li><a class="menu-link" href="/index.html">Home</a></li>
-        <li><a class="menu-link" href="/portrait/index.html">Portrait</a></li>
-        <li><a class="menu-link" href="/event/index.html">Event</a></li>
-        <li><a class="menu-link" href="/landscape/index.html">Landscape</a></li>
-        <li><a class="menu-link" href="/corporate/index.html">Corporate</a></li>
-        <li><a class="menu-link" href="/about/index.html">About</a></li>
-        <li><a class="menu-link" href="/behind/index.html">Behind the Scenes</a></li>
+        <li><a href="/" class="menu-link">Home</a></li>
+        <li><a href="/portrait/" class="menu-link">Portrait</a></li>
+        <li><a href="/event/" class="menu-link">Event</a></li>
+        <li><a href="/landscape/" class="menu-link">Landscape</a></li>
+        <li><a href="/corporate/" class="menu-link">Corporate</a></li>
+        <li><a href="/about/" class="menu-link">About</a></li>
+        <li><a href="/behind/" class="menu-link">Behind the Scenes</a></li>
       </ul>
 
-      <!-- exakt wie auf der Landing-Page -->
+      <!-- Socials: exakt wie Landing -->
       <ul class="socials">
-        <li><a class="is-stroke" href="https://www.instagram.com/juri_prinz_/" target="_blank" aria-label="Instagram" style="--fit-stroke: 84%;"><img src="/img/social/instagram.svg" alt="Instagram"></a></li>
-        <li><a class="is-fill" href="https://www.facebook.com/juri.prinz/" target="_blank" aria-label="Facebook"><img src="/img/social/facebook.svg" alt="Facebook"></a></li>
-        <li><a class="is-fill" href="https://www.youtube.com/@1Prinz" target="_blank" aria-label="YouTube"><img src="/img/social/youtube.svg" alt="YouTube"></a></li>
-        <li><a class="is-fill" href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank" aria-label="LinkedIn" style="--fit-fill: 92%;"><img src="/img/social/linkedin.svg" alt="LinkedIn"></a></li>
-        <li><a class="is-fill" href="https://t.me/prinz_juri" target="_blank" aria-label="Telegram" style="--fit-fill: 100%;"><img src="/img/social/telegram.svg" alt="Telegram"></a></li>
-        <li><a class="is-stroke" href="https://wa.me/41767788891" target="_blank" aria-label="WhatsApp" style="--fit-stroke: 84%;"><img src="/img/social/whatsapp.svg" alt="WhatsApp"></a></li>
-        <li><a class="is-stroke" href="mailto:prinz_juri@online.de" aria-label="E-Mail"><img src="/img/social/mail.svg" alt="E-Mail"></a></li>
+        <li><a class="is-stroke" href="https://www.instagram.com/juri_prinz_/" target="_blank" aria-label="Instagram" style="--fit-stroke:84%"><img src="/img/social/instagram.svg" alt="Instagram"></a></li>
+        <li><a class="is-fill"   href="https://www.facebook.com/juri.prinz/" target="_blank" aria-label="Facebook"><img src="/img/social/facebook.svg" alt="Facebook"></a></li>
+        <li><a class="is-fill"   href="https://www.youtube.com/@1Prinz"      target="_blank" aria-label="YouTube"><img src="/img/social/youtube.svg"  alt="YouTube"></a></li>
+        <li><a class="is-fill"   href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank" aria-label="LinkedIn" style="--fit-fill:92%"><img src="/img/social/linkedin.svg" alt="LinkedIn"></a></li>
+        <li><a class="is-fill"   href="https://t.me/prinz_juri"               target="_blank" aria-label="Telegram" style="--fit-fill:100%"><img src="/img/social/telegram.svg" alt="Telegram"></a></li>
+        <li><a class="is-stroke" href="https://wa.me/41767788891"             target="_blank" aria-label="WhatsApp" style="--fit-stroke:84%"><img src="/img/social/whatsapp.svg" alt="WhatsApp"></a></li>
+        <li><a class="is-stroke" href="mailto:prinz_juri@online.de"                     aria-label="E-Mail"><img src="/img/social/mail.svg" alt="E-Mail"></a></li>
       </ul>
     </nav>
   </div>
 
   <main class="page">
-    <!-- Linke Scroll-Spalte -->
+    <!-- Linke Auto-Scroll-Galerie -->
     <section class="left" id="gallery">
       <div class="stream" id="stream">
         <div class="set" id="setA">
-          <!-- ersetzbar durch echte Corporate-Motive -->
           <a class="card"><img src="/img/corp_01.jpg" alt="Corporate 1"></a>
           <a class="card"><img src="/img/corp_02.jpg" alt="Corporate 2"></a>
           <a class="card"><img src="/img/corp_03.jpg" alt="Corporate 3"></a>
@@ -163,45 +165,27 @@
       </div>
     </section>
 
-    <!-- Rechte Video-Spalte -->
+    <!-- Rechte Video-Fläche mit Vignette -->
     <section class="right">
       <div class="video-wrap">
         <video autoplay muted loop playsinline preload="auto">
           <source src="/video/Ricardo_ZXXV.mp4" type="video/mp4" />
         </video>
-        <div class="video-overlay-gradient"></div>
+        <!-- Optionales Poster, falls du Video deaktivieren willst:
+        <img class="hero-poster" src="/img/corporate_hero_16x9.jpg" alt="Corporate Hero">
+        -->
+        <div class="video-vignette"></div>
       </div>
       <img class="logo-watermark" src="/img/logo_inverted.png" alt="Juri Prinz Logo">
     </section>
   </main>
 
-  <!-- Gleiches Menü-JS wie auf Landing-Page (IDs sind identisch) -->
+  <!-- Gleiches Menü-JS wie Landing -->
   <script src="/js/menu.js?v=11" defer></script>
 
-  <!-- Page-spezifisches JS (Auto-Scroll + Burger fallback) -->
+  <!-- Autoscroll nur für die linke Spalte (mobil bleibt an) -->
   <script>
-    // Fallback-Toggle, falls menu.js noch nicht geladen wäre
     document.addEventListener('DOMContentLoaded', () => {
-      const burger = document.getElementById('hamburger');
-      const menu = document.getElementById('menu');
-      if (burger && menu) {
-        const toggle = (open) => {
-          const willOpen = (typeof open === 'boolean') ? open : !menu.classList.contains('active');
-          burger.classList.toggle('active', willOpen);
-          menu.classList.toggle('active', willOpen);
-          menu.setAttribute('aria-hidden', String(!willOpen));
-          document.body.style.overflow = willOpen ? 'hidden' : '';
-        };
-        burger.addEventListener('click', () => toggle());
-        document.querySelectorAll('.menu-link, .socials a').forEach(a => {
-          a.addEventListener('click', () => toggle(false));
-        });
-        document.addEventListener('keydown', e => {
-          if (e.key === 'Escape' && menu.classList.contains('active')) toggle(false);
-        });
-      }
-
-      // ===== Endlos-Scroll für die linke Spalte =====
       const gallery = document.getElementById('gallery');
       const setA = document.getElementById('setA');
       const setB = document.getElementById('setB');
@@ -220,13 +204,11 @@
       }
 
       let running=false, last=performance.now(), setHeight=0;
-
       function ensureHeight(){
-        // Duplizieren, bis genug Inhalt zum Loopen da ist
         setB.innerHTML = setA.innerHTML;
-        const target = gallery.clientHeight * 2;
+        const need = gallery.clientHeight * 2;
         const stream = document.getElementById('stream');
-        while (stream.scrollHeight < target){
+        while (stream.scrollHeight < need){
           setB.innerHTML += setA.innerHTML;
         }
         setHeight = setA.offsetHeight || (stream.scrollHeight / 2);
@@ -253,10 +235,7 @@
 
       gallery.addEventListener('mouseenter',()=> running = false);
       gallery.addEventListener('mouseleave',()=> running = true);
-      window.addEventListener('resize', () => {
-        // bei Resize Höhe neu kalkulieren
-        ensureHeight();
-      });
+      window.addEventListener('resize', ensureHeight);
     });
   </script>
 </body>
