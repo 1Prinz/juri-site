@@ -4,55 +4,60 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About • Juri Prinz Photography</title>
-  <link rel="stylesheet" href="style.css?v=1" />
+
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="/img/favicon/favicon-32.png" />
+  <link rel="canonical" href="https://juri-prinz.de/about/" />
+
+  <link rel="stylesheet" href="style.css?v=4" />
 </head>
 <body>
-  <main class="about-end">
-    <!-- Großes Logo -->
-    <div class="about-logo">
-      <img src="/img/logo_inverted.png" alt="Juri Prinz Photography" />
-    </div>
 
-    <!-- Kontakt-Icons (nur deine SVGs) -->
-    <ul class="contact-row" id="contactRow">
+  <!-- Fullscreen Final-Bildschirm: großes Logo + Kontakt-Icons -->
+  <main class="final" id="final">
+    <!-- WICHTIG: Kein width/height inline setzen! -->
+    <img class="final-logo" src="/img/logo_inverted.png" alt="Juri Prinz Logo" />
+
+    <ul class="belt" id="belt" aria-label="Kontakt">
+      <!-- Deine eigenen SVGs/Dateien – keine FA-Icons -->
       <li>
-        <a class="is-fill" href="https://www.instagram.com/juri_prinz_/" target="_blank" aria-label="Instagram">
-          <img src="/img/social/instagram.svg" alt="Instagram" />
+        <a href="mailto:prinz_juri@online.de" aria-label="E-Mail" class="is-stroke">
+          <img src="/img/social/mail.svg" alt="E-Mail">
         </a>
       </li>
       <li>
-        <a class="is-fill" href="https://www.facebook.com/juri.prinz/" target="_blank" aria-label="Facebook">
-          <img src="/img/social/facebook.svg" alt="Facebook" />
+        <a href="https://www.instagram.com/juri_prinz_/" target="_blank" rel="noreferrer" aria-label="Instagram" class="is-stroke">
+          <img src="/img/social/instagram.svg" alt="Instagram">
         </a>
       </li>
       <li>
-        <a class="is-fill" href="https://www.youtube.com/@1Prinz" target="_blank" aria-label="YouTube">
-          <img src="/img/social/youtube.svg" alt="YouTube" />
+        <a href="https://www.facebook.com/juri.prinz/" target="_blank" rel="noreferrer" aria-label="Facebook" class="is-fill">
+          <img src="/img/social/facebook.svg" alt="Facebook">
         </a>
       </li>
       <li>
-        <a class="is-fill" href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank" aria-label="LinkedIn">
-          <img src="/img/social/linkedin.svg" alt="LinkedIn" />
+        <a href="https://www.youtube.com/@1Prinz" target="_blank" rel="noreferrer" aria-label="YouTube" class="is-fill">
+          <img src="/img/social/youtube.svg" alt="YouTube">
         </a>
       </li>
       <li>
-        <a class="is-fill" href="https://t.me/prinz_juri" target="_blank" aria-label="Telegram">
-          <img src="/img/social/telegram.svg" alt="Telegram" />
+        <a href="https://www.linkedin.com/in/juri-prinz-5b1008a8/" target="_blank" rel="noreferrer" aria-label="LinkedIn" class="is-fill">
+          <img src="/img/social/linkedin.svg" alt="LinkedIn">
         </a>
       </li>
       <li>
-        <a class="is-stroke" href="https://wa.me/41767788891" target="_blank" aria-label="WhatsApp">
-          <img src="/img/social/whatsapp.svg" alt="WhatsApp" />
+        <a href="https://t.me/prinz_juri" target="_blank" rel="noreferrer" aria-label="Telegram" class="is-fill">
+          <img src="/img/social/telegram.svg" alt="Telegram">
         </a>
       </li>
       <li>
-        <a class="is-stroke" href="mailto:prinz_juri@online.de" aria-label="E-Mail">
-          <img src="/img/social/mail.svg" alt="E-Mail" />
+        <a href="https://wa.me/41767788891" target="_blank" rel="noreferrer" aria-label="WhatsApp" class="is-stroke">
+          <img src="/img/social/whatsapp.svg" alt="WhatsApp">
         </a>
       </li>
     </ul>
   </main>
 
-  <script src="script.js?v=1" defer></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
