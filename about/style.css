@@ -1,72 +1,140 @@
-/* =========================================
-   ABOUT - Finale Szene mit dynamischen Icons
-   ========================================= */
+/* ==========================================================
+   ABOUT – Finale Szene (Logo + dynamische Kontakt-Icons)
+   ✓ Eigene SVGs (img/social/*.svg)
+   ✓ Nachbarn ~66% kleiner (skalieren dynamisch)
+   ✓ Safari-freundlicher Glow nur beim Hover
+   ✓ Logo um ~25% höher platziert
+   ========================================================== */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ---------- Grundlayout ---------- */
+:root{
+  --bg: #000;
+  --fg: #fff;
+
+  /* Icon-Box-Größe Desktop/Mobile */
+  --icon-box: 64px;
+  --icon-gap: 22px;
+
+  /* Dynamische Skalen */
+  --scale-active: 1.00;   /* Icon unter der Maus */
+  --scale-near:   0.34;   /* direkte Nachbarn (~66% kleiner) */
+  --scale-far:    0.12;   /* alle anderen */
+
+  /* Hover-Glow Intensität */
+  --glow-outer: 18px;
+  --glow-inner: 8px;
+
+  /* Logo-Position */
+  --logo-top-desktop: 12vh;  /* ~25% höher als exakt mittig wirkt */
+  --logo-top-mobile:  8vh;
 }
 
-body {
-  background: #000;
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+
+/* ---------- Finale Szene Container ---------- */
+.about-end{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:6vh 16px 12vh;
 }
 
-.about-logo img {
-  width: clamp(240px, 38vw, 420px);
-  opacity: 0.95;
-  filter: drop-shadow(0 0 14px rgba(255,255,255,.3));
-  transition: transform .6s ease;
-  margin-bottom: 60px;
+/* ---------- Logo oben (25% höher) ---------- */
+.about-logo{
+  position:relative;
+  width:min(540px, 60vw);
+  margin-top: var(--logo-top-desktop);
+  margin-bottom: 8vh;
+}
+.about-logo img{
+  width:100%;
+  height:auto;
+  display:block;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,.08));
 }
 
-/* Icon-Leiste */
-.contact-icons {
-  display: flex;
-  gap: 42px;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+/* ---------- Kontakt-Icon-Leiste ---------- */
+.contact-row{
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap: var(--icon-gap);
+  padding:0;
+  /* Platz nach unten für Touch/Scroll-Gesten */
+  margin-bottom: 6vh;
+}
+.contact-row li{ display:flex }
+
+.contact-row a{
+  width: var(--icon-box);
+  height: var(--icon-box);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  position:relative;
+  /* Safari: flackerfrei + keine „Box-Ränder“ beim Filter */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, filter;
+  -webkit-tap-highlight-color: transparent;
+  /* Standard: „ferne“ Größe */
+  transform-origin:center center;
+  transform: scale(var(--scale, var(--scale-far)));
 }
 
-.contact-icons a {
-  --scale: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: scale(var(--scale));
-  transition: transform .15s ease-out, filter .2s ease-out;
-  filter: drop-shadow(0 0 6px rgba(255,255,255,.25));
+/* Die IMG-SVGs selbst (DEINE Dateien) */
+.contact-row a img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+  /* Basis: kein Glow */
+  filter:none; -webkit-filter:none;
+  -webkit-font-smoothing: antialiased;
+  image-rendering:auto;
 }
 
-.contact-icons img {
-  width: 48px;
-  height: 48px;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Glow bei direktem Hover */
-.contact-icons a:hover {
-  filter: drop-shadow(0 0 14px rgba(255,255,255,.55))
-          drop-shadow(0 0 6px rgba(255,255,255,.35));
-}
-
-/* Mobile Fallback: leichtes Pulsieren */
-@media (max-width: 900px) {
-  .contact-icons a {
-    animation: pulse 2.8s infinite ease-in-out;
+/* Hover-Glow nur bei Desktop */
+@media (hover:hover){
+  .contact-row a:hover img{
+    filter:
+      drop-shadow(0 0 var(--glow-outer) rgba(255,255,255,.55))
+      drop-shadow(0 0 var(--glow-inner) rgba(255,255,255,.35));
+    -webkit-filter:
+      drop-shadow(0 0 var(--glow-outer) rgba(255,255,255,.55))
+      drop-shadow(0 0 var(--glow-inner) rgba(255,255,255,.35));
   }
-  @keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+}
+
+/* ---------- Zustände, die JS setzt ---------- */
+/* aktives Icon (unter Maus/Finger) */
+.contact-row a.is-active { --scale: var(--scale-active); }
+/* direkte Nachbarn links/rechts */
+.contact-row a.is-near   { --scale: var(--scale-near);   }
+/* restliche (Fallback ist far) */
+.contact-row a.is-far    { --scale: var(--scale-far);    }
+
+/* weiche Übergänge für Scale & Glow */
+.contact-row a,
+.contact-row a img{
+  transition: transform .18s ease, filter .18s ease, -webkit-filter .18s ease;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px){
+  :root{
+    --icon-box: 56px;
+    --icon-gap: 18px;
+    --logo-top-desktop: var(--logo-top-mobile);
   }
+  .about-logo{ margin-bottom: 6vh; }
 }
