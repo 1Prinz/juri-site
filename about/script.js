@@ -1,75 +1,87 @@
-// ===== Video -> Final-Screen einblenden =====
-const video = document.getElementById('heroVideo');
-const final = document.getElementById('final');
-const skip  = document.getElementById('skip');
+/* Dynamischer Größen-/Glow-Gürtel
+   Regeln:
+   - zentrales Icon (Distanz 0):   Scale 2.00, starker Glow
+   - direkte Nachbarn ±1:          Scale 1.15, mittlerer Glow
+   - Nachbarn der Nachbarn ±2:     Scale 1.03, leichter Glow
+   - Rest:                         Scale 1.00, kein Glow
+*/
 
-function revealFinal(){
-  if (!final.classList.contains('is-visible')) {
-    final.classList.add('is-visible');
-    try { video.pause(); } catch {}
+(function(){
+  const belt = document.getElementById('belt');
+  if(!belt) return;
+  const items = Array.from(belt.querySelectorAll('a'));
+
+  // Basis zurücksetzen
+  function reset(){
+    for(const a of items){
+      a.style.transform = 'translateZ(0) scale(1)';
+      a.removeAttribute('data-role');
+      const img = a.querySelector('img');
+      if(img){
+        img.style.filter = 'none';
+        img.style.webkitFilter = 'none';
+      }
+    }
   }
-}
-if (video) {
-  video.addEventListener('timeupdate', () => {
-    if (video.duration && video.currentTime / video.duration > 0.85) revealFinal();
-  });
-  video.addEventListener('ended', revealFinal);
-}
-if (skip) skip.addEventListener('click', revealFinal);
 
-// ===== Icon-Scale als Skala um das aktive Icon =====
-const belt = document.getElementById('contactBelt');
-if (belt) {
-  const links = Array.from(belt.querySelectorAll('a'));
+  // Glow-Helfer
+  function setGlow(a, level){
+    const img = a.querySelector('img');
+    if(!img) return;
+    if(level === 0){
+      img.style.filter =
+        'drop-shadow(0 0 16px rgba(255,255,255,.55)) drop-shadow(0 0 28px rgba(255,255,255,.35))';
+      img.style.webkitFilter = img.style.filter;
+      a.setAttribute('data-role','center');
+    } else if(level === 1){
+      img.style.filter = 'drop-shadow(0 0 10px rgba(255,255,255,.38))';
+      img.style.webkitFilter = img.style.filter;
+      a.setAttribute('data-role','near');
+    } else if(level === 2){
+      img.style.filter = 'drop-shadow(0 0 4px rgba(255,255,255,.15))';
+      img.style.webkitFilter = img.style.filter;
+      a.setAttribute('data-role','far');
+    }
+  }
 
-  // zentrale Skalierungslogik
-  const setScales = (activeIdx) => {
-    links.forEach((a, i) => {
-      const d = Math.abs(i - activeIdx);
-      let scale = 1.00, tier = 3;
-
-      if (d === 0) { scale = 2.00; tier = 0; }   // 200 %
-      else if (d === 1) { scale = 1.15; tier = 1; } // 115 %
-      else if (d === 2) { scale = 1.03; tier = 2; } // 103 %
-      else { scale = 1.00; tier = 3; }              // 100 %
-
-      a.style.transform = `translateZ(0) scale(${scale})`;
-      a.dataset.tier = String(tier);
+  function applyIndex(centerIdx){
+    reset();
+    items.forEach((a, i)=>{
+      const d = Math.abs(i - centerIdx);
+      if(d === 0){
+        a.style.transform = 'translateZ(0) scale(2.0)';
+        setGlow(a, 0);
+      }else if(d === 1){
+        a.style.transform = 'translateZ(0) scale(1.15)';
+        setGlow(a, 1);
+      }else if(d === 2){
+        a.style.transform = 'translateZ(0) scale(1.03)';
+        setGlow(a, 2);
+      }
     });
-  };
+  }
 
-  // flüssig während Bewegung: finde das nächstgelegene Icon
-  const nearestIndexFromEvent = (evt) => {
-    const x = evt.clientX ?? (evt.touches && evt.touches[0]?.clientX);
-    if (x == null) return null;
-    const boxes = links.map(el => el.getBoundingClientRect());
-    let best = 0, bestDist = Infinity;
-    boxes.forEach((b, idx) => {
-      const cx = b.left + b.width / 2;
-      const dist = Math.abs(cx - x);
-      if (dist < bestDist) { bestDist = dist; best = idx; }
+  // Ermittele das „nächste“ Icon zur Mausposition (x)
+  function nearestIndex(clientX){
+    const rect = belt.getBoundingClientRect();
+    let best = 0;
+    let bestDist = Infinity;
+    items.forEach((a, i)=>{
+      const r = a.getBoundingClientRect();
+      const cx = (r.left + r.right) / 2;
+      const dist = Math.abs(clientX - cx);
+      if(dist < bestDist){ bestDist = dist; best = i; }
     });
     return best;
-  };
+  }
 
-  // Maus / Touch bewegen -> aktiv neu bestimmen
-  const onMove = (evt) => {
-    const idx = nearestIndexFromEvent(evt);
-    if (idx != null) setScales(idx);
-  };
-  belt.addEventListener('mousemove', onMove);
-  belt.addEventListener('touchmove', onMove, { passive: true });
-
-  // Fokussprung (Keyboard) berücksichtigen
-  links.forEach((a, idx) => {
-    a.addEventListener('focus', () => setScales(idx));
-    a.addEventListener('mouseenter', () => setScales(idx));
+  // Events
+  belt.addEventListener('mousemove', (e)=>{
+    const idx = nearestIndex(e.clientX);
+    applyIndex(idx);
   });
-
-  // Raus -> zurück auf neutral
-  const reset = () => {
-    links.forEach(a => { a.style.transform = 'translateZ(0) scale(1)'; a.dataset.tier = '3'; });
-  };
   belt.addEventListener('mouseleave', reset);
-  belt.addEventListener('touchend', reset);
-}
+
+  // Startzustand: kein Glow/Scale – clean
+  reset();
+})();
