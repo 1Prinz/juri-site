@@ -1,21 +1,64 @@
-// Dynamische Icon-Interaktion für Desktop
-const container = document.querySelector('.contact-icons');
-const icons = Array.from(container.querySelectorAll('a'));
+/* ==========================================================
+   ABOUT – Dynamische Kontakt-Icons
+   – Nachbarn ~66% kleiner (Skalen via CSS-Variablen)
+   – Kein Font Awesome: wir benutzen DEINE SVGs aus <img src="">
+   – Safari-freundlich (transform + filter nur auf IMG)
+   ========================================================== */
 
-container.addEventListener('mousemove', e => {
-  const rect = container.getBoundingClientRect();
+(function(){
+  const row = document.querySelector('.contact-row');
+  if(!row) return;
 
-  icons.forEach(icon => {
-    const iconRect = icon.getBoundingClientRect();
-    const iconCenter = iconRect.left + iconRect.width / 2;
-    const distance = Math.abs(e.clientX - iconCenter);
-    const proximity = Math.max(0, 1 - distance / 280); // Reichweite des Effekts
-    const scale = 0.7 + proximity * 0.8; // 0.7–1.5
-    icon.style.setProperty('--scale', scale.toFixed(2));
-  });
-});
+  const items = Array.from(row.querySelectorAll('a'));
+  if(items.length === 0) return;
 
-// sanfter Reset beim Verlassen
-container.addEventListener('mouseleave', () => {
-  icons.forEach(icon => icon.style.setProperty('--scale', 1));
-});
+  let activeIndex = Math.floor(items.length / 2); // Start: mittig „aktiv“
+
+  // Helper: Klassen für Zustand setzen
+  function applyStates(center){
+    items.forEach((a, i) => {
+      a.classList.remove('is-active','is-near','is-far');
+      if(i === center){
+        a.classList.add('is-active');
+      }else if (Math.abs(i - center) === 1){
+        a.classList.add('is-near');
+      }else{
+        a.classList.add('is-far');
+      }
+    });
+  }
+
+  applyStates(activeIndex);
+
+  // Desktop: Maus bewegt sich über die Leiste -> Index bestimmen
+  function handlePointerMove(e){
+    const rect = row.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const slot = rect.width / items.length;
+    let idx = Math.floor(x / slot);
+    idx = Math.max(0, Math.min(items.length - 1, idx));
+    if(idx !== activeIndex){
+      activeIndex = idx;
+      applyStates(activeIndex);
+    }
+  }
+
+  // Touch: aktives Icon auf das berührte setzen
+  function handleTouch(e){
+    if(!e.touches || e.touches.length === 0) return;
+    const t = e.touches[0];
+    const rect = row.getBoundingClientRect();
+    const x = t.clientX - rect.left;
+    const slot = rect.width / items.length;
+    let idx = Math.floor(x / slot);
+    idx = Math.max(0, Math.min(items.length - 1, idx));
+    if(idx !== activeIndex){
+      activeIndex = idx;
+      applyStates(activeIndex);
+    }
+  }
+
+  row.addEventListener('mousemove', handlePointerMove);
+  row.addEventListener('touchstart', handleTouch, {passive:true});
+  row.addEventListener('touchmove', handleTouch,  {passive:true});
+})();
